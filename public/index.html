@@ -4,106 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD Tickets from MongoDB</title>
+    <link rel="stylesheet" href="sideandnav.css">
+    <link rel="stylesheet" href="ticket.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Tickets from MongoDB</h1>
+    <nav>
+        <h1 style="margin: 0px;">comsci</h1>
+        <h1 style="margin: 0px; color: white;">park</h1>
+    </nav>
+    <side class="sidebar">
+        <div class="profile">
+            <div class="image-user">
+                <img src="user.jpg" alt="User Picture">
+            </div>
+            <!-- เชื่อมกับ db -->
+            <div class="userInfo">
+                <p>John Doe</p>
+                <p>Maneger</p>
+            </div>
+        </div>
+        <menu>
+            <ul>
+                <li class="Dashboard"><a href="dashboard.html">
+                    <i class='bx bxs-dashboard'></i> Dashboard</a></li>
+                <li class="Ticket"><a href="ticket.html">
+                    <i class='bx bxs-id-card'></i> Tiket</a></li>
+                <li class="Customer"><a href="customer.html">
+                    <i class='bx bxs-user'></i> Customer</a></li>
+                <li class="Transaction"><a href="transaction.html">
+                    <i class='bx bxs-bar-chart-alt-2'></i> Transaction</a></li>
+                <li class="Place"><a href="place.html">
+                    <i class='bx bxs-map'></i> Place</a></li>
+                <li class="Employee"><a href="employee.html">
+                    <i class='bx bxs-briefcase'></i></i> Employee</a></li>
+                <li class="Review"><a href="review.html">
+                    <i class='bx bxs-report'></i> Review</a></li>
+            </ul>
+        </menu>
+        <footer class="logout">
+            <a href="index.html"><i class='bx bx-log-out'></i> Logout</a>
+        </footer>
+    </side>
+    <content>
+        <!-- Ticket Creation Form -->
+        <div class="container-tiket">
+            <h2 style="font-size: 20px; font-weight: bold;">Create Ticket</h2>
+            <form id="create-ticket-form">
+                <input class="T_type" type="text" id="ticket-type" placeholder="Type" required>
+                <input class="T_price" type="text" id="ticket-price" placeholder="Price" required>
+                <input class="T_photo" type="text" id="ticket-photo" placeholder="Photo URL" required>
+                <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
+                <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
+                <button class="button_create" type="submit">Create Ticket</button>
+                <text class="text-exp" style="text-align: center;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
+            </form>
+        </div>
 
-    <!-- Create Ticket Form -->
-    <h2>Create Ticket</h2>
-    <form id="create-ticket-form">
-        <input type="text" id="ticket-type" placeholder="Type" required>
-        <input type="text" id="ticket-price" placeholder="Price" required>
-        <input type="text" id="ticket-photo" placeholder="Photo URL" required>
-        <input type="text" id="ticket-name" placeholder="Name" required>
-        <textarea id="ticket-detail" placeholder="Detail" required></textarea>
-        <button type="submit">Create Ticket</button>
-    </form>
+        <hr class="style1" style="margin-top: 30px;">
+        
+        <!-- Tickets Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold;">Tickets Detail</h2>
+        <div class="container mt-4" style="padding: 0px;">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Detail</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tickets-table-body">
+                    <!-- Dynamic rows will go here -->
+                </tbody>
 
-    <hr>
 
-    <!-- Tickets List -->
-    <h2>Tickets List</h2>
-    <ul id="tickets-list"></ul>
+            </table>
+        </div>
 
-    <script>
-        // Function to fetch and display tickets
-        function fetchTickets() {
-            fetch('http://localhost:3000/api/tickets')
-                .then(response => response.json())
-                .then(data => {
-                    const ticketsList = document.getElementById('tickets-list');
-                    ticketsList.innerHTML = '';  // Clear the current list
-                    data.forEach(ticket => {
-                        const listItem = document.createElement('li');
-                        listItem.innerHTML = `
-                            <strong>${ticket.type}</strong>: ${ticket.price} - 
-                            <strong>${ticket.photo}</strong> - 
-                            <strong>${ticket.name}</strong> - 
-                            <strong>${ticket.detail}</strong>
-                            <button onclick="deleteTicket('${ticket._id}')">Delete</button>
-                            <button onclick="showUpdateForm('${ticket._id}')">Update</button>
-                        `;
-                        ticketsList.appendChild(listItem);
-                    });
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
+        <!-- Update Ticket Modal -->
+        <div id="updateForm" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeUpdateForm()">&times;</span>
+                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Update Ticket</h2>
+                <form id="updateTicketForm">
+                    <label for="name">Name :</label>
+                    <input type="text" id="updateName" required>
+                    <label for="type">Type :</label>
+                    <input type="text" id="updateType" required>
+                    <label for="price">Price :</label>
+                    <input type="number" id="updatePrice" required>
+                    <label for="photo">Photo URL :</label>
+                    <input type="text" id="updatePhoto" required>
+                    <label for="detail">Details :</label>
+                    <textarea id="updateDetail" required></textarea>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
 
-        // Function to handle ticket creation
-        document.getElementById('create-ticket-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const newTicket = {
-                type: document.getElementById('ticket-type').value,
-                price: document.getElementById('ticket-price').value,
-                photo: document.getElementById('ticket-photo').value,
-                name: document.getElementById('ticket-name').value,
-                detail: document.getElementById('ticket-detail').value
-            };
+        <script>
+            // Fetch and display tickets
+            function fetchTickets() {
+                fetch('http://localhost:3000/api/tickets')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.getElementById('tickets-table-body');
+                        tableBody.innerHTML = '';  // Clear the current rows
+                        data.forEach(ticket => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${ticket.type}</td>
+                                <td>${ticket.price}</td>
+                                <td><img src="${ticket.photo}" alt="Photo" style="width: 50px; height: 50px;"></td>
+                                <td>${ticket.name}</td>
+                                <td>${ticket.detail}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${ticket._id}')">Update</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteTicket('${ticket._id}')">Delete</button>
+                                </td>`;
+                                tableBody.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching tickets:', error));
+            }
 
-            fetch('http://localhost:3000/api/tickets', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newTicket)
-            })
-            .then(response => response.json())
-            .then(data => {
-                fetchTickets();  // Reload tickets
-            })
-            .catch(error => console.error('Error creating ticket:', error));
-        });
+            // Fetch tickets when the page loads
+            document.addEventListener('DOMContentLoaded', fetchTickets);
 
-        // Function to delete a ticket
-        function deleteTicket(id) {
-            fetch(`http://localhost:3000/api/tickets/${id}`, {
-                method: 'DELETE'
-            })
-            .then(() => fetchTickets())  // Reload tickets after deletion
-            .catch(error => console.error('Error deleting ticket:', error));
-        }
-
-        // Function to show update form
-        function showUpdateForm(id) {
-            const ticket = prompt('Enter new ticket name:', 'Updated Ticket');
-            if (ticket) {
-                const updatedTicket = {
-                    name: ticket
+            // Handle ticket creation
+            document.getElementById('create-ticket-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const newTicket = {
+                    type: document.getElementById('ticket-type').value,
+                    price: document.getElementById('ticket-price').value,
+                    photo: document.getElementById('ticket-photo').value,
+                    name: document.getElementById('ticket-name').value,
+                    detail: document.getElementById('ticket-detail').value
                 };
-                fetch(`http://localhost:3000/api/tickets/${id}`, {
-                    method: 'PUT',
+                fetch('http://localhost:3000/api/tickets', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(updatedTicket)
+                    body: JSON.stringify(newTicket)
                 })
-                .then(() => fetchTickets())  // Reload tickets after update
-                .catch(error => console.error('Error updating ticket:', error));
+                .then(response => response.json())
+                .then(() => {
+                    fetchTickets();  // Reload the ticket list
+                    alert('Ticket created successfully!');
+                })
+                .catch(error => console.error('Error creating ticket:', error));
+            });
+
+            // Handle ticket deletion
+            function deleteTicket(id) {
+                fetch(`http://localhost:3000/api/tickets/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(() => fetchTickets())  // Reload tickets after deletion
+                .catch(error => console.error('Error deleting ticket:', error));
             }
+
+            // Show the update form for a ticket > old code
+            // function showUpdateForm(id) {
+            //     const newName = prompt('Enter new ticket name:');
+            //     const newType = prompt('Enter new ticket type:');
+            //     const newPrice = prompt('Enter new ticket price:');
+            //     const newPhoto = prompt('Enter new ticket photo URL:');
+            //     const newDetail = prompt('Enter new ticket details:');
+
+            //     if (newName && newType && newPrice && newPhoto && newDetail) {
+            //         const updatedTicket = {
+            //             name: newName,
+            //             type: newType,
+            //             price: newPrice,
+            //             photo: newPhoto,
+            //             detail: newDetail
+            //         };
+
+            //         // Update the ticket using PUT request
+            //         fetch(`http://localhost:3000/api/tickets/${id}`, {
+            //             method: 'PUT',
+            //             headers: {
+            //                 'Content-Type': 'application/json'
+            //             },
+            //             body: JSON.stringify(updatedTicket)
+            //         })
+            //         .then(() => fetchTickets())  // Reload tickets after update
+            //         .catch(error => console.error('Error updating ticket:', error));
+            //     }
+            // }
+            // Open Update Form
+            
+            function openUpdateForm(id) {
+                currentTicketId = id;
+                document.getElementById('updateForm').style.display = 'flex';
+            // Fetch existing ticket details to pre-fill the form
+                fetch(`http://localhost:3000/api/tickets/${id}`)
+                .then(response => response.json())
+                .then(ticket => {
+                    document.getElementById('updateName').value = ticket.name;
+                    document.getElementById('updateType').value = ticket.type;
+                    document.getElementById('updatePrice').value = ticket.price;
+                    document.getElementById('updatePhoto').value = ticket.photo;
+                    document.getElementById('updateDetail').value = ticket.detail;
+                })
+                .catch(error => console.error('Error fetching ticket:', error));
+            }
+
+        // Close Update Form
+        function closeUpdateForm() {
+            document.getElementById('updateForm').style.display = 'none';
         }
 
-        // Fetch tickets when the page loads
-        fetchTickets();
+        // Handle Form Submission
+        document.getElementById('updateTicketForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const updatedTicket = {
+                name: document.getElementById('updateName').value,
+                type: document.getElementById('updateType').value,
+                price: document.getElementById('updatePrice').value,
+                photo: document.getElementById('updatePhoto').value,
+                detail: document.getElementById('updateDetail').value
+            };
+            fetch(`http://localhost:3000/api/tickets/${currentTicketId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedTicket)
+            })
+            .then(() => {
+                closeUpdateForm();
+                fetchTickets(); // Reload tickets
+                })
+                .catch(error => console.error('Error updating ticket:', error));
+            });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </content>
 </body>
 </html>
