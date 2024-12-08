@@ -1,5 +1,6 @@
 body{
     color: #2b2b2b;
+    font-family: "Poppins", sans-serif;
 }
 nav{
     grid-area: nav;
