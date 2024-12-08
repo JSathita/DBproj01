@@ -3,66 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD Tickets from MongoDB</title>
-    <link rel="stylesheet" href="sideandnav.css">
+    <title>Ticket</title>
     <link rel="stylesheet" href="ticket.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <nav>
-        <h1 style="margin: 0px;">comsci</h1>
-        <h1 style="margin: 0px; color: white;">park</h1>
-    </nav>
-    <side class="sidebar">
-        <div class="profile">
-            <div class="image-user">
-                <img src="user.jpg" alt="User Picture">
-            </div>
-            <!-- เชื่อมกับ db -->
-            <div class="userInfo">
-                <p>John Doe</p>
-                <p>Maneger</p>
-            </div>
-        </div>
-        <menu>
-            <ul>
-                <li class="Dashboard"><a href="dashboard.html">
-                    <i class='bx bxs-dashboard'></i> Dashboard</a></li>
-                <li class="Ticket"><a href="ticket.html">
-                    <i class='bx bxs-id-card'></i> Tiket</a></li>
-                <li class="Customer"><a href="customer.html">
-                    <i class='bx bxs-user'></i> Customer</a></li>
-                <li class="Transaction"><a href="transaction.html">
-                    <i class='bx bxs-bar-chart-alt-2'></i> Transaction</a></li>
-                <li class="Place"><a href="place.html">
-                    <i class='bx bxs-map'></i> Place</a></li>
-                <li class="Employee"><a href="employee.html">
-                    <i class='bx bxs-briefcase'></i></i> Employee</a></li>
-                <li class="Review"><a href="review.html">
-                    <i class='bx bxs-report'></i> Review</a></li>
-            </ul>
-        </menu>
-        <footer class="logout">
-            <a href="index.html"><i class='bx bx-log-out'></i> Logout</a>
-        </footer>
-    </side>
-    <content>
+    <!-- link template -->
+    <div id="nav-placeholder"></div> 
+
+    <content>    
         <!-- Ticket Creation Form -->
         <div class="container-tiket">
             <h2 style="font-size: 20px; font-weight: bold;">Create Ticket</h2>
             <form id="create-ticket-form">
                 <input class="T_type" type="text" id="ticket-type" placeholder="Type" required>
                 <input class="T_price" type="text" id="ticket-price" placeholder="Price" required>
-                <input class="T_photo" type="text" id="ticket-photo" placeholder="Photo URL" required>
+                <input class="T_photo" type="file" id="ticket-photo" placeholder="Photo URL" required>
                 <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
                 <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
                 <button class="button_create" type="submit">Create Ticket</button>
-                <text class="text-exp" style="text-align: center;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
+                <text class="text-exp" style="text-align: center; margin: 0px;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
             </form>
         </div>
 
-        <hr class="style1" style="margin-top: 30px;">
+        <!-- เส้น -->
+        <hr class="style1" style="margin-top: 40px;"> 
         
         <!-- Tickets Table -->
         <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold;">Tickets Detail</h2>
@@ -81,8 +47,6 @@
                 <tbody id="tickets-table-body">
                     <!-- Dynamic rows will go here -->
                 </tbody>
-
-
             </table>
         </div>
 
@@ -92,6 +56,7 @@
                 <span class="close" onclick="closeUpdateForm()">&times;</span>
                 <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Update Ticket</h2>
                 <form id="updateTicketForm">
+                    <!-- <img class="img" src="" alt="Selected Photo" style="width: 100px; height: 100px; margin-bottom: 10px;"> -->
                     <label for="name">Name :</label>
                     <input type="text" id="updateName" required>
                     <label for="type">Type :</label>
@@ -99,7 +64,7 @@
                     <label for="price">Price :</label>
                     <input type="number" id="updatePrice" required>
                     <label for="photo">Photo URL :</label>
-                    <input type="text" id="updatePhoto" required>
+                    <input class="T_photo" type="file" id="updatePhoto" required>
                     <label for="detail">Details :</label>
                     <textarea id="updateDetail" required></textarea>
                     <button type="submit" class="btn btn-primary">Update</button>
@@ -120,10 +85,10 @@
                             row.innerHTML = `
                                 <td>${ticket.type}</td>
                                 <td>${ticket.price}</td>
-                                <td><img src="${ticket.photo}" alt="Photo" style="width: 50px; height: 50px;"></td>
+                                <td><img src="/picture/${ticket.photo}" class="img-fetch" alt="Photo" style="width: 50px; height: 50px;"></td>
                                 <td>${ticket.name}</td>
                                 <td>${ticket.detail}</td>
-                                <td>
+                                <td style="text-align: center; justify-content: center;">
                                     <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${ticket._id}')">Update</button>
                                     <button class="btn btn-danger btn-sm" onclick="deleteTicket('${ticket._id}')">Delete</button>
                                 </td>`;
@@ -246,6 +211,15 @@
                 })
                 .catch(error => console.error('Error updating ticket:', error));
             });
+
+        // link template
+        // Load template.html and inject into the placeholder
+        fetch("template.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("nav-placeholder").innerHTML = data;
+            })
+            .catch(error => console.error('Error loading template:', error));
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </content>
