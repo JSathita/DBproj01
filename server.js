@@ -27,8 +27,41 @@ const ticketSchema = new mongoose.Schema({
     name: String,
     detail: String
 });
+const placeSchema = new mongoose.Schema({
+    place_name: {
+        type: String,
+        required: true, // กำหนดให้จำเป็นต้องมีค่า
+        trim: true // ลบช่องว่างหน้าและหลังข้อความ
+    },
+    place_detail: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    place_supAmnt: {
+        type: Number, // กำหนดเป็น Number
+        required: true,
+        min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
+        max: 2147483647  // ค่า 32-bit signed integer สูงสุด
+    },
+    place_maintDate: {
+        type: Date,
+        required: true,
+        trim: true
+    },
+    place_zone: String,
+    place_detailPrc: {
+        type: Number, // กำหนดเป็น Number
+        required: true,
+        min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
+        max: 2147483647  // ค่า 32-bit signed integer สูงสุด
+    },
+    place_detailCond: String,
+    ref: String
+})
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
+const Place = mongoose.model('Place',placeSchema)
 
 // API Route to fetch items
 app.get('/api/tickets', async (req, res) => {
@@ -51,7 +84,6 @@ app.listen(port, () => {
 });
 
 // 1. Create a new ticket
-
 app.post('/api/tickets', async (req, res) => {
     try {
         const ticket = new Ticket(req.body);
@@ -59,6 +91,16 @@ app.post('/api/tickets', async (req, res) => {
         res.status(201).json(ticket);  // Return the newly created ticket
     } catch (error) {
         res.status(400).send('Error creating ticket');
+    }
+});
+// create a new place x zone
+app.post('/api/places', async (req, res) => {
+    try {
+        const place = new Place(req.body);
+        await place.save();
+        res.status(201).json(place);
+    } catch (error) {
+        res.status(400).send('Error creating place');
     }
 });
 
@@ -71,17 +113,38 @@ app.get('/api/tickets', async (req, res) => {
         res.status(500).send('Error fetching tickets');
     }
 });
+// get all place (read)
+app.get('/api/places', async (req, res) => {
+    try {
+        const places = await Place.find();
+        res.json(places);  // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching places');
+    }
+});
 
 // 3. Update a ticket by ID
 app.put('/api/tickets/:id', async (req, res) => {
     try {
         const updatedTicket = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedTicket) {
-            return res.status(404).send('Ticket not found');
+            return res.status(404).send('Place not found');
         }
         res.json(updatedTicket);  // Return the updated ticket
     } catch (error) {
         res.status(400).send('Error updating ticket');
+    }
+});
+//update a place by ID
+app.put('/api/places/:id', async (req, res) => {
+    try {
+        const updatedPlace = await Place.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedPlace) {
+            return res.status(404).send('Place not found');
+        }
+        res.json(updatedPlace);
+    } catch (error) {
+        res.status(400).send('Error updating places');
     }
 });
 
@@ -95,5 +158,17 @@ app.delete('/api/tickets/:id', async (req, res) => {
         res.json({ message: 'Ticket deleted successfully' });  // Send success message
     } catch (error) {
         res.status(500).send('Error deleting ticket');
+    }
+});
+//delete a place by ID
+app.delete('/api/places/:id', async (req, res) => {
+    try {
+        const deletedPlace = await Place.findByIdAndDelete(req.params.id);
+        if (!deletedPlace) {
+            return res.status(404).send('Place not found');
+        }
+        res.json({ message: 'Place deleted successfully' });  // Send success message
+    } catch (error) {
+        res.status(500).send('Error deleting places');
     }
 });
