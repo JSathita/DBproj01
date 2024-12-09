@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place</title>
+    <link rel="stylesheet" href="sideandnav.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="places.css">
+</head>
+<body>
+    <!-- link template -->
+    <div id="nav-placeholder"></div> 
+    <content>
+        <!-- Place Creation Form -->
+        <div class="container-place">
+            <h2 style="font-size: 20px; font-weight: bold;">Create Place</h2>
+            <form id="create-place-form">
+                <input class="P_type" type="text" id="place-type" placeholder="Type" required>
+                <input class="P_price" type="text" id="place-price" placeholder="Price" required>
+                <input class="P_photo" type="file" id="place-photo" placeholder="Photo URL" required>
+                <input class="P_name" type="text" id="place-name" placeholder="Name" required>
+                <textarea class="P_detail" id="place-detail" placeholder="Detail" required></textarea>
+                <button class="button_create" type="submit">Create Place</button>
+                <text class="text-exp" style="text-align: center;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
+            </form>
+        </div>
+
+        <!-- เส้น -->
+        <hr class="style1" style="margin-top: 30px;"> 
+        
+        <!-- Tickets Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold;">Tickets Detail</h2>
+        <div class="container mt-4" style="padding: 0px;">
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Detail</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tickets-table-body">
+                    <!-- Dynamic rows will go here -->
+                </tbody>
+            </table>
+        </div>
+    </content>
+    <script>
+        document.getElementById('create-place-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const newTicket = {
+                    type: document.getElementById('place-type').value,
+                    price: document.getElementById('place-price').value,
+                    photo: document.getElementById('place-photo').value,
+                    name: document.getElementById('place-name').value,
+                    detail: document.getElementById('place-detail').value
+                };
+                fetch('http://localhost:3000/api/tickets', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newPlace)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    fetchPlaces();  // Reload the ticket list
+                    alert('Place created successfully!');
+                })
+                .catch(error => console.error('Error creating place:', error));
+            });
+
+        // link template
+        // Load template.html and inject into the placeholder
+        fetch("template.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("nav-placeholder").innerHTML = data;
+            })
+            .catch(error => console.error('Error loading template:', error));
+    </script>
+</body>
+</html>
