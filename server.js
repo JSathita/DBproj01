@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const { type } = require('os');
 
 const app = express();
 const port = 3000;
@@ -60,17 +61,38 @@ const placeSchema = new mongoose.Schema({
     place_detailCond: String,
 })
 const reviewSchema = new mongoose.Schema({
-    rev_name: { type: String, required: true },
-    rev_detail: { type: String, required: true },
-    rev_date: { type: String, required: true },
-    rev_completedate: { type: String, default: '' },
-    rev_budget: { type: String, default: '' },
-    rev_note: { type: String, default: '' }
+    rev_name: { type: String, required: true, trim: true },
+    rev_detail: { type: String, required: true, trim: true },
+    rev_date: { type: String, required: true, trim: true },
+    rev_completedate: { type: String, default: '', trim: true },
+    rev_budget: { type: String, default: '', trim: true },
+    rev_note: { type: String, default: '', trim: true },
+    rev_status: Boolean
 });
+const empSchema = new mongoose.Schema({
+    emp_name: { type: String, required: true, trim: true },
+    depm_ID: { type: String, required: true, trim: true },
+    shift_ID: { type: String, required: true, trim: true },
+    emp_startDate: { type: Date, required: true },
+    emp_phone: { type: String, default: '', trim: true },
+    emp_mail: { type: String, default: '', trim: true },
+    emp_address: { type: String, default: '', trim: true }
+})
+const cusSchema = new mongoose.Schema({
+    cus_id: { type: String, required: true, trim: true },
+    cus_name: { type: String, required: true, trim: true },
+    cus_dateofbirth: { type: Date, required: true },
+    cus_phone: { type: String, default: '', trim: true },
+    cus_email: { type: String, default: '', trim: true },
+    cus_idcard: { type: String, default: '', trim: true },
+    cus_apDate: { type: Date, required: true },
+})
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
 const Place = mongoose.model('Place',placeSchema);
 const Review = mongoose.model('Review', reviewSchema);
+const Employee = mongoose.model('Employee', empSchema);
+const Customer = mongoose.model('Customer', cusSchema);
 
 // API Route to fetch items
 app.get('/api/tickets', async (req, res) => {
@@ -95,6 +117,22 @@ app.get('/api/reviews', async (req, res) => {
         res.json(reviews);  // Send the data as JSON
     } catch (error) {
         res.status(500).send('Error fetching reviews');
+    }
+});
+app.get('/api/employees', async (req, res) => {
+    try {
+        const employees = await Employee.find();
+        res.json(employees);
+    } catch (error) {
+        res.status(500).send('Error fetching data');
+    }
+});
+app.get('/api/customers', async (req, res) => {
+    try {
+        const customers = await Customer.find();
+        res.json(customers);
+    } catch (error) {
+        res.status(500).send('Error fetching data');
     }
 });
 
@@ -138,6 +176,26 @@ app.post('/api/reviews', async (req, res) => {
         res.status(400).send('Error creating review');
     }
 });
+//Create a new employee
+app.post('/api/employees', async (req, res) => {
+    try {
+        const employee = new Employee(req.body);
+        await employee.save();
+        res.status(201).json(employee);  // Return the newly created employee
+    } catch (error) {
+        res.status(400).send('Error creating employee');
+    }
+});
+//Create a new customer
+app.post('/api/customers', async (req, res) => {
+    try {
+        const customer = new Customer(req.body);
+        await customer.save();
+        res.status(201).json(customer);  // Return the newly created customer
+    } catch (error) {
+        res.status(400).send('Error creating customer');
+    }
+});
 
 // 2. Get all tickets (Read)
 app.get('/api/tickets', async (req, res) => {
@@ -164,6 +222,24 @@ app.get('/api/reviews', async (req, res) => {
         res.json(reviews);  // Send the data as JSON
     } catch (error) {
         res.status(500).send('Error fetching reviews');
+    }
+});
+//Get all employees (Read)
+app.get('/api/employees', async (req, res) => {
+    try {
+        const employees = await Employee.find();
+        res.json(employees);  // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching employees');
+    }
+});
+//Get all customers (Read)
+app.get('/api/customers', async (req, res) => {
+    try {
+        const customers = await Customer.find();
+        res.json(customers);  // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching customers');
     }
 });
 
@@ -203,6 +279,30 @@ app.put('/api/reviews/:id', async (req, res) => {
         res.status(400).send('Error updating review');
     }
 });
+//Update a employee by ID
+app.put('/api/employees/:id', async (req, res) => {
+    try {
+        const updatedEmployee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedEmployee) {
+            return res.status(404).send('Employee not found');
+        }
+        res.json(updatedEmployee);  // Return the updated employee
+    } catch (error) {
+        res.status(400).send('Error updating employee');
+    }
+});
+//Update a customer by ID
+app.put('/api/customers/:id', async (req, res) => {
+    try {
+        const updatedCustomer = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedCustomer) {
+            return res.status(404).send('Customer not found');
+        }
+        res.json(updatedCustomer);  // Return the updated Customer
+    } catch (error) {
+        res.status(400).send('Error updating Customer');
+    }
+});
 
 // 4. Delete a ticket by ID
 app.delete('/api/tickets/:id', async (req, res) => {
@@ -238,5 +338,29 @@ app.delete('/api/reviews/:id', async (req, res) => {
         res.json({ message: 'Review deleted successfully' });  // Send success message
     } catch (error) {
         res.status(500).send('Error deleting review');
+    }
+});
+//Delete a employee by ID
+app.delete('/api/employees/:id', async (req, res) => {
+    try {
+        const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
+        if (!deletedEmployee) {
+            return res.status(404).send('Employee not found');
+        }
+        res.json({ message: 'Employee deleted successfully' });  // Send success message
+    } catch (error) {
+        res.status(500).send('Error deleting employee');
+    }
+});
+//Delete a customer by ID
+app.delete('/api/customers/:id', async (req, res) => {
+    try {
+        const deletedCustomer = await Customer.findByIdAndDelete(req.params.id);
+        if (!deletedCustomer) {
+            return res.status(404).send('Customer not found');
+        }
+        res.json({ message: 'Customer deleted successfully' });  // Send success message
+    } catch (error) {
+        res.status(500).send('Error deleting Customer');
     }
 });
