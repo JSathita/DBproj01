@@ -55,7 +55,7 @@
     background-color: #5ce056;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
@@ -70,7 +70,7 @@
     font-weight: bold;
     background-color: #e8e7e7;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
