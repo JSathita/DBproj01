@@ -195,21 +195,21 @@
     width: 60px;
 }
 .btn-danger {
-    background-color: #ed4458 !important;
+    background-color: #5ce056 !important;
     color: white;
     border: none !important;
 }
 .btn-danger:hover {
-    background-color: #e6253b !important;
+    background-color: #3cc335 !important;
 }
 .btn-primary {
-    background-color: #589ff1 !important;
+    background-color: #ed4458 !important;
     color: white;
     border: none !important;
-    margin-bottom: 5px;
+
 }
 .btn-primary:hover {
-    background-color: #2682eb !important;
+    background-color: #e6253b !important;
 }
 .img-fetch:hover{
     transform: scale(120%);
