@@ -38,7 +38,7 @@ const placeSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    place_supAmnt: {
+    place_capacity: {
         type: Number, // กำหนดเป็น Number
         required: true,
         min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
