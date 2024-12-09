@@ -30,7 +30,7 @@
     padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .T_type { grid-area: T_type; }
@@ -43,16 +43,16 @@
     padding: 12px;
     font-size: 16px;
     font-weight: bold;
-    background-color: #28a745;
+    background-color: #5ce056;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
 }
 .button_create:hover {
-    background-color: #218838;
+    background-color: #3cc335;
 }
 .text-exp {
     grid-area: text-exp;
@@ -61,6 +61,8 @@
     text-align: center;
     margin-top: 10px;
 }
+
+/* update */
 .modal {
     display: flex;
     position: fixed;
@@ -142,43 +144,34 @@ h2 {
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: white;
+    background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-.table th {
-    text-align: center;
-    font-size: 16px;
-    padding: 10px;
-}
-
-.table td {
-    font-size: 16px;
-    padding: 10px;
-}
-
 .table thead th {
-    background-color: #424141;
-    color: white;
-    font-weight: 600;
-    border-bottom: 2px solid #ddd;
+    background-color: #e8e7e7;
+    color: #333;
+    font-weight: 530;
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
 }
-
-.table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+.table tbody td {
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
 }
-
 .table tbody tr:hover {
-    background-color: #e9ecef;
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease;
 }
-
 .table img {
-    border-radius: 10px;
+    border-radius: 4px;
+    max-width: 50px;
 }
-
 .btn {
     font-size: 12px;
     padding: 5px 10px;
@@ -188,26 +181,26 @@ h2 {
     width: 60px;
 }
 .btn-danger {
-    background-color: #dc3545;
+    background-color: #ed4458 !important;
     color: white;
+    border: none !important;
 }
 .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #e6253b !important;
 }
 .btn-primary {
-    background-color: #007bff;
+    background-color: #589ff1 !important;
     color: white;
+    border: none !important;
     margin-bottom: 5px;
 }
 .btn-primary:hover {
-    background-color: #0056b3;
-}
-input{
-    font-size: 16px;
-}
-input::placeholder{
-    font-size: 16px;
+    background-color: #2682eb !important;
 }
 .img-fetch:hover{
     transform: scale(120%);
+}
+.update:hover {
+    color: white !important;
+    background: #2682eb !important;
 }
