@@ -21,7 +21,11 @@
                 <input class="T_photo" type="file" id="ticket-photo" placeholder="Photo URL" required>
                 <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
                 <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
-                <button class="button_create" type="submit">Create</button>
+                <div class="button-form">
+                    <button class="button_clear" type="button">Clear</button>
+                    <button class="button_create" type="submit">Create</button>
+                </div>
+                
                 <text class="text-exp" style="text-align: center; margin: 0px;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
             </form>
         </div>
@@ -121,8 +125,15 @@
                 .then(() => {
                     fetchTickets();  // Reload the ticket list
                     alert('Ticket created successfully!');
+                    document.getElementById('create-ticket-form').reset();
                 })
                 .catch(error => console.error('Error creating ticket:', error));
+            });
+
+            //clear form
+            const clearButton = document.querySelector('.button_clear');
+            clearButton.addEventListener('click', function () {
+                document.getElementById('create-ticket-form').reset();  // Reset the form
             });
 
             // Handle ticket deletion
