@@ -15,6 +15,7 @@
 }
 .container-tiket h2 {
     margin-bottom: 20px;
+    text-align: center;
 }
 #create-ticket-form {
     display: grid;
@@ -22,12 +23,13 @@
     grid-template-areas: 
         "T_type T_price T_photo T_name"
         "T_detail T_detail T_detail T_detail"
-        "button_create button_create button_create button_create"
+        "button-form button-form button-form button-form"
         "text-exp text-exp text-exp text-exp";
     gap: 20px;
 }
 .T_type, .T_price, .T_photo, .T_name, .T_detail {
     padding: 6px 12px;
+    height: 42.42px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -38,6 +40,13 @@
 .T_photo { grid-area: T_photo; }
 .T_name { grid-area: T_name; }
 .T_detail { grid-area: T_detail;}
+.button-form{
+    grid-area: button-form;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "button_clear button_create";
+    gap: 20px;
+}
 .button_create {
     grid-area: button_create;
     padding: 9px 12px;
@@ -46,7 +55,7 @@
     background-color: #5ce056;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
@@ -54,6 +63,20 @@
 .button_create:hover {
     background-color: #3cc335;
 }
+.button_clear { 
+    grid-area: button_clear; 
+    padding: 9px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #e8e7e7;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.button_create:hover { background-color: #3cc335; }
+.button_clear:hover { background-color: #cac9c9; }
 .text-exp {
     grid-area: text-exp;
     font-size: 14px;
@@ -75,7 +98,6 @@
     justify-content: center;
     align-items: center;
 }
-
 .modal-content {
     background-color: white;
     padding: 20px;
@@ -86,7 +108,6 @@
     position: relative;
     margin: 0px 400px;
 }
-
 .close {
     font-size: 30px;
     cursor: pointer;
@@ -97,11 +118,9 @@
     font-weight: bold;
     margin-right: 8px;
 }
-
 .close:hover {
     color: #dc3545;
 }
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -112,7 +131,6 @@
         transform: scale(1);
     }
 }
-
 .modal-content input,
 .modal-content textarea {
     width: 100%;
@@ -123,7 +141,6 @@
     font-size: 16px;
     box-sizing: border-box;
 }
-
 /* Buttons Styling */
 .modal-content button {
     padding: 10px 0px;
@@ -134,7 +151,7 @@
     transition: all 0.3s;
     width: 100%;
 }
-h2 {
+.modal-content h2 {
     font-size: 18px;
     font-weight: bold;
     color: #343a40; /* Neutral text color */
