@@ -223,7 +223,7 @@
                 place_detail: document.getElementById('place-detail').value,
                 place_capacity: document.getElementById('place-capacity').value,
                 place_maintDate: document.getElementById('place-maintDate').value,
-                place_zone: selectedZone.value, // Use the value of the selected radio button
+                place_zone: document.querySelector('input[name="se-zone"]:checked').value,
                 place_detailPrc: document.getElementById('place-detailPrc').value,
                 place_detailCond: document.getElementById('place-detailCond').value,
             };
