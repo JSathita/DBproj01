@@ -63,7 +63,7 @@
                     <input type="number" id="updateBudget" required>
                     <label for="note">Notes:</label>
                     <textarea id="updateNote"></textarea>
-                    <button type="submit" class="btn update" style="background: #589ff1;">Update</button>
+                    <button type="submit" class="btn update" style="background: #589ff1;" id="updateButton">Update</button>
                 </form>
             </div>
         </div>
@@ -77,17 +77,18 @@
                     const tableBody = document.getElementById('reviews-table-body');
                     tableBody.innerHTML = '';  // Clear the current rows
                     data.forEach(review => {
+                        const isSolved = review.rev_status === true; // Check if review is solved
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td style="text-align: center;">${review.rev_name}</td>
-                            <td style="text-align: center;">${review.rev_detail}</td>
+                            <td>${review.rev_detail}</td>
                             <td style="text-align: center;">${review.rev_date}</td>
                             <td style="text-align: center;">${review.rev_completedate || 'N/A'}</td>
                             <td style="text-align: center;">${review.rev_budget || 'N/A'}</td>
                             <td style="text-align: center;">${review.rev_note || 'N/A'}</td>
                             <td style="text-align: center;">
-                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${review._id}')">Update</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteReview('${review._id}')">Delete</button>
+                                ${!isSolved ? `<button class="btn btn-primary btn-sm" onclick="openUpdateForm('${review._id}')">Solve</button>` : ''}
+                                ${isSolved ? `<button class="btn btn-danger btn-sm" onclick="deleteReview('${review._id}')">Clear</button>` : ''}
                             </td>`;
                         tableBody.appendChild(row);
                     });
@@ -101,16 +102,15 @@
             // Handle review creation
             document.getElementById('create-review-form').addEventListener('submit', function (e) {
                 e.preventDefault();
-
                 const newReview = {
                     rev_name: document.getElementById('review-name').value,
                     rev_detail: document.getElementById('review-detail').value,
                     rev_date: document.getElementById('review-date').value,
                     rev_completedate: '',
                     rev_budget: '',
-                    rev_note: ''
+                    rev_note: '',
+                    rev_status: false // New review is not solved
                 };
-
                 fetch('http://localhost:3000/api/reviews', {
                     method: 'POST',
                     headers: {
@@ -167,15 +167,19 @@
             // Close Update Form
             function closeUpdateForm() {
                 document.getElementById('updateForm').style.display = 'none';
+                document.getElementById('updateButton').style.display = 'inline-block';  // Show the button again when closed
             }
 
             // Handle Form Submission
             document.getElementById('updateReviewForm').addEventListener('submit', (e) => {
                 e.preventDefault();
+                // Hide the Update button after successful submission
+                document.getElementById('updateButton').style.display = 'none';
                 const updatedReview = {
                     rev_completedate: document.getElementById('updateCompletedate').value,
                     rev_budget: document.getElementById('updateBudget').value,
-                    rev_note: document.getElementById('updateNote').value
+                    rev_note: document.getElementById('updateNote').value,
+                    rev_status: true // Mark the review as solved
                 };
                 fetch(`http://localhost:3000/api/reviews/${currentReviewId}`, {
                     method: 'PUT',
@@ -200,7 +204,6 @@
                 })
                 .catch(error => console.error('Error loading template:', error));
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </content>
 </body>
 </html>
