@@ -12,15 +12,16 @@
     <!-- link template -->
     <div id="nav-placeholder"></div> 
     <content>
-        <!-- Ticket Creation Form -->
+        <!-- Customer Creation Form -->
         <div class="container-tiket">
             <h2 style="font-size: 20px; font-weight: bold;">Add Customer</h2>
-            <form id="create-ticket-form">
-                <input class="T_type" type="text" id="ticket-type" placeholder="Type" required>
-                <input class="T_price" type="number" id="ticket-price" placeholder="Price" required>
-                <input class="T_photo" type="file" id="ticket-photo" placeholder="Photo URL" required>
-                <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
-                <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
+            <form id="create-customer-form">
+                <input class="C_id" type="text" id="customer-id" placeholder="ID" required>
+                <input class="C_name" type="text" id="customer-name" placeholder="Name" required>
+                <input class="C_dateofbirth" type="date" id="customer-dateofbirth" placeholder="Date of birth" required>
+                <input class="C_phone" type="text" id="customer-phone" placeholder="Telephone number" required>
+                <input class="C_email" type="email" id="customer-email" placeholder="Email" required>
+                <input class="C_idcard" type="text" id="customer-idcard" placeholder="ID card" required>
                 <div class="button-form">
                     <button class="button_clear" type="button">Clear</button>
                     <button class="button_create" type="submit">Create</button>
@@ -32,33 +33,33 @@
         <!-- เส้น -->
         <hr class="style1" style="margin-top: 40px;"> 
         
-        <!-- Tickets Table -->
-        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Tickets Detail</h2>
+        <!-- Customers Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Customers Detail</h2>
         <div class="container mt-4" style="padding: 0;">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Price</th>
-                        <th>Photo</th>
+                        <th>ID</th>
                         <th>Name</th>
-                        <th>Detail</th>
+                        <th>Birthday</th>
+                        <th>Tel.</th>
+                        <th>Email</th>
+                        <th>ID card</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="tickets-table-body">
+                <tbody id="customers-table-body">
                     <!-- Dynamic rows will go here -->
                 </tbody>
             </table>
         </div>
         
-        <!-- Update Ticket Modal -->
+        <!-- Update Customer Modal -->
         <div id="updateForm" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeUpdateForm()">&times;</span>
-                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Update Ticket</h2>
-                <form id="updateTicketForm">
-                    <!-- <img class="img" src="" alt="Selected Photo" style="width: 100px; height: 100px; margin-bottom: 10px;"> -->
+                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Edit Information</h2>
+                <form id="updateCustomerForm">
                     <label for="name">Name :</label>
                     <input type="text" id="updateName">
                     <label for="type">Type :</label>
