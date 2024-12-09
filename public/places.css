@@ -3,3 +3,260 @@
     background-color: #fad25a;
     border-radius: 20px;
 }
+
+/* General Styling for Create  */
+.container-place {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    width: 100%;
+    margin: 20px auto;
+}
+.container-place h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+#create-place-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: 
+        /* "P_name P_name dropdown" */
+        "P_name P_detail P_detail"
+        "P_zone P_zone P_zone"
+        "P_capacity P_maintDate P_detailPrc"
+        "P_detailCond P_detailCond P_detailCond"
+        "button-form button-form button-form";
+    gap: 20px;
+}
+.P_name, .P_detail, .P_detailPrc,.P_capacity, .P_maintDate, .P_photo, .P_detailCond {
+    padding: 6px 12px;
+    height: 42.42px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.P_name { grid-area: P_name; }
+.P_detail { grid-area: P_detail; }
+.P_detailPrc { grid-area: P_detailPrc; }
+.P_capacity { grid-area: P_capacity; }
+.P_maintDate { grid-area: P_maintDate; }
+.P_photo{grid-area: P_photo;}
+.P_detailCond { grid-area: P_detailCond;}
+.P_zone {
+    grid-area: P_zone;
+}
+/* General form styling */
+.P_zone {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.button-form{
+    grid-area: button-form;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "button_clear button_create";
+    gap: 20px;
+}
+.button_create {
+    grid-area: button_create;
+    padding: 9px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #5ce056;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.button_create:hover {
+    background-color: #3cc335;
+}
+.button_clear { 
+    grid-area: button_clear; 
+    padding: 9px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #e8e7e7;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.button_create:hover { background-color: #3cc335; }
+.button_clear:hover { background-color: #cac9c9; }
+.text-exp {
+    grid-area: text-exp;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* General Dropdown Styles */
+.dropbtn {
+    background-color: #f9f9f9;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.dropbtn:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+/* Dropdown Button */
+.dropdown-button {
+    width: 100%;
+    background-color: #ffffff;
+    color: #333;
+    padding: 14px 16px;
+    height: 42.42px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    transition: all 0.2s ease;
+}
+.dropdown-button:hover {
+    border-color: #aaa;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+/* Dropdown Content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background-color: #ffffff;
+    min-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+.dropdown-content label {
+    color: #333;
+    padding: 12px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.dropdown-content label:hover {
+    background-color: #f5f5f5;
+    color: #007aff;
+}
+/* Tooltip */
+label[alt]::after {
+    content: attr(alt);
+    display: none;
+    background: #333;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+    position: absolute;
+    white-space: nowrap;
+    right: 105%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    pointer-events: none;
+}
+label:hover::after {
+    display: block;
+}
+/* Active Dropdown */
+.dropdown.active .dropdown-content {
+    display: block;
+}
+/* Dropdown arrow */
+.dropdown-arrow {
+    font-size: 12px;
+    color: #333;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.table thead th {
+    background-color: #e8e7e7;
+    color: #333;
+    font-weight: 530;
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+}
+.table tbody td {
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+}
+.table tbody tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease;
+}
+.table img {
+    border-radius: 4px;
+    max-width: 50px;
+}
+.btn {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    width: 60px;
+}
+.btn-danger {
+    background-color: #ed4458 !important;
+    color: white;
+    border: none !important;
+}
+.btn-danger:hover {
+    background-color: #e6253b !important;
+}
+.btn-primary {
+    background-color: #589ff1 !important;
+    color: white;
+    border: none !important;
+    margin-bottom: 5px;
+}
+.btn-primary:hover {
+    background-color: #2682eb !important;
+}
+.img-fetch:hover{
+    transform: scale(120%);
+}
