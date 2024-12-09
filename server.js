@@ -39,25 +39,25 @@ const placeSchema = new mongoose.Schema({
         trim: true
     },
     place_capacity: {
-        type: Number, // กำหนดเป็น Number
+        // type: Number, // กำหนดเป็น Number
+        type: String,
         required: true,
-        min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
-        max: 2147483647  // ค่า 32-bit signed integer สูงสุด
+        trim: true
     },
     place_maintDate: {
-        type: Date,
+        type: String,
+        // type: Date,
         required: true,
         trim: true
     },
     place_zone: String,
     place_detailPrc: {
-        type: Number, // กำหนดเป็น Number
+        // type: Number, // กำหนดเป็น Number
+        type: String,
         required: true,
-        min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
-        max: 2147483647  // ค่า 32-bit signed integer สูงสุด
+        trim: true
     },
     place_detailCond: String,
-    ref: String
 })
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
