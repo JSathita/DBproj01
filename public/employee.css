@@ -1,0 +1,223 @@
+/* main css */
+.Employee{
+    background-color: #fad25a;
+    border-radius: 20px;
+}
+
+/* General Styling for Create Ticket */
+.container-tiket {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    width: 100%;
+    margin: 20px auto;
+}
+.container-tiket h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+#create-ticket-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+        "T_type T_price T_photo T_name"
+        "T_detail T_detail T_detail T_detail"
+        "button-form button-form button-form button-form"
+        "text-exp text-exp text-exp text-exp";
+    gap: 20px;
+}
+.T_type, .T_price, .T_photo, .T_name, .T_detail {
+    padding: 6px 12px;
+    height: 42.42px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+.T_type { grid-area: T_type; }
+.T_price { grid-area: T_price; }
+.T_photo { grid-area: T_photo; }
+.T_name { grid-area: T_name; }
+.T_detail { grid-area: T_detail;}
+.button-form{
+    grid-area: button-form;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "button_clear button_create";
+    gap: 20px;
+}
+.button_create {
+    grid-area: button_create;
+    padding: 9px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #5ce056;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.button_create:hover {
+    background-color: #3cc335;
+}
+.button_clear { 
+    grid-area: button_clear; 
+    padding: 9px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #e8e7e7;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.button_create:hover { background-color: #3cc335; }
+.button_clear:hover { background-color: #cac9c9; }
+.text-exp {
+    grid-area: text-exp;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* update */
+.modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+    margin: 0px 400px;
+}
+.close {
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #2b2b2b;
+    font-weight: bold;
+    margin-right: 8px;
+}
+.close:hover {
+    color: #dc3545;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+/* Buttons Styling */
+.modal-content button {
+    padding: 10px 0px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+.modal-content h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #343a40; /* Neutral text color */
+    margin-bottom: 20px;
+    text-align: center;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.table thead th {
+    background-color: #e8e7e7;
+    color: #333;
+    font-weight: 530;
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 16px;
+}
+.table tbody td {
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+}
+.table tbody tr:hover {
+    background-color: #f5f5f5;
+    transition: background-color 0.2s ease;
+}
+.table img {
+    border-radius: 4px;
+    max-width: 50px;
+}
+.btn {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    width: 60px;
+}
+.btn-danger {
+    background-color: #ed4458 !important;
+    color: white;
+    border: none !important;
+}
+.btn-danger:hover {
+    background-color: #e6253b !important;
+}
+.btn-primary {
+    background-color: #589ff1 !important;
+    color: white;
+    border: none !important;
+    margin-bottom: 5px;
+}
+.btn-primary:hover {
+    background-color: #2682eb !important;
+}
+.img-fetch:hover{
+    transform: scale(120%);
+}
+.update:hover {
+    color: white !important;
+    background: #2682eb !important;
+}
