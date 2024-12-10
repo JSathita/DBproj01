@@ -134,6 +134,7 @@
 .modal-content input,
 .modal-content textarea {
     width: 100%;
+    height: 42.42px;
     padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #cccccc;
