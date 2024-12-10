@@ -64,6 +64,27 @@
         </div>
 
         <script>
+            let selectedTicketTypes = [];  // สร้างตัวแปรเก็บข้อมูลตั๋วที่เลือก
+            let totalTickets = 0;
+            let totalPrice = 0;
+            
+            function updateTransactionSummary() {
+                totalTickets = selectedTicketTypes.reduce((sum, item) => sum + item.quantity, 0);
+                totalPrice = selectedTicketTypes.reduce((sum, item) => sum + (item.ticket.price * item.quantity), 0);
+                // Update the total number of tickets and total price on the form
+                document.getElementById('trans-num').value = totalTickets;
+                document.getElementById('trans-totalPrice').value = `$${totalPrice.toFixed(2)}`;
+            }
+            function updateSelectedTicketsList() {
+                const list = document.getElementById('selected-tickets-list');
+                list.innerHTML = '';  // Clear the current list
+                selectedTicketTypes.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.ticket.name} x ${item.quantity} ($${item.ticket.price * item.quantity})`;
+                    list.appendChild(li);
+                });
+            }
+            
             // Function to fetch and display transactions
             function fetchTransactions() {
                 fetch('http://localhost:3000/api/transactions')
