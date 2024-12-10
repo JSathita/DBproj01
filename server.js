@@ -69,7 +69,7 @@ const reviewSchema = new mongoose.Schema({
 });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
-const Place = mongoose.model('Place',placeSchema);
+const Place = mongoose.model('Place', placeSchema);
 const Review = mongoose.model('Review', reviewSchema);
 
 // API Route to fetch items
@@ -307,4 +307,84 @@ app.get('/api/employees/count', async (req, res) => {
     } catch (error) {
         res.status(500).send('Error fetching employees count');
     }
+    // Schema and Model for Transaction
+    const transactionSchema = new mongoose.Schema({
+        cus_idcard: String,      // Customer idcard
+        tk_type: String,       // Ticket Type
+        trans_num: Number,     // Transaction Number
+        pro_name: String,      // Promotion Name
+        trans_totalPrice: Number, // Total Price
+    });
+
+    // Create Transaction model
+    const Transaction = mongoose.model('Transaction', transactionSchema);
+
+    // API Route to fetch transactions
+    app.get('/api/transactions', async (req, res) => {
+        try {
+            const transactions = await Transaction.find();
+            res.json(transactions);  // Send all transactions as JSON
+        } catch (error) {
+            res.status(500).send('Error fetching transactions');
+        }
+    });
+
+    // Root route to serve your HTML page
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'txn.html'));
+    });
+
+    // Start server
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    });
+
+    // 1. Create a new transaction
+    app.post('/api/transactions', async (req, res) => {
+        try {
+            const transaction = new Transaction(req.body);
+            await transaction.save();
+            res.status(201).json(transaction);  // Return the newly created transaction
+        } catch (error) {
+            res.status(400).send('Error creating transaction');
+        }
+    });
+
+    // 2. Get all transactions (Read)
+    app.get('/api/transactions', async (req, res) => {
+        try {
+            const transactions = await Transaction.find();
+            res.json(transactions);  // Send the data as JSON
+        } catch (error) {
+            res.status(500).send('Error fetching transactions');
+        }
+    });
+
+    // 3. Update a transaction by ID
+    app.put('/api/transactions/:id', async (req, res) => {
+        try {
+            const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            if (!updatedTransaction) {
+                return res.status(404).send('Transaction not found');
+            }
+            res.json(updatedTransaction);  // Return the updated transaction
+        } catch (error) {
+            res.status(400).send('Error updating transaction');
+        }
+    });
+
+    // 4. Delete a transaction by ID
+    app.delete('/api/transactions/:id', async (req, res) => {
+        try {
+            const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
+            if (!deletedTransaction) {
+                return res.status(404).send('Transaction not found');
+            }
+            res.json({ message: 'Transaction deleted successfully' });  // Send success message
+        } catch (error) {
+            res.status(500).send('Error deleting transaction');
+        }
+    });
+
 });
+
