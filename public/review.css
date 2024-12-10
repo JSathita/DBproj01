@@ -19,14 +19,15 @@
 }
 #create-review-form {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas: 
-        "R_name R_detail R_date"
-        "button-form button-form button-form"
-        "text-exp text-exp text-exp";
+        "R_name R_topic"
+        "R_detail R_detail"
+        "button-form button-form"
+        "text-exp text-exp";
     gap: 20px;
 }
-.R_name, .R_detail, .R_date {
+.R_name, .R_topic, .R_detail {
     padding: 6px 12px;
     height: 42.42px;
     font-size: 16px;
@@ -35,8 +36,8 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .R_name { grid-area: R_name; }
+.R_topic { grid-area: R_topic; }
 .R_detail { grid-area: R_detail; }
-.R_date { grid-area: R_date; }
 .button-form{
     grid-area: button-form;
     display: grid;
