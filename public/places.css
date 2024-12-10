@@ -26,7 +26,8 @@
         "P_zone P_zone P_zone"
         "P_capacity P_maintDate P_detailPrc"
         "P_detailCond P_detailCond P_detailCond"
-        "button-form button-form button-form";
+        "button-form button-form button-form"
+        "text-exp text-exp text-exp";
     gap: 20px;
 }
 .P_name, .P_detail, .P_detailPrc,.P_capacity, .P_maintDate, .P_photo, .P_detailCond {
@@ -55,7 +56,6 @@
     text-align: center;
     justify-content: space-between;
 }
-
 .button-form{
     grid-area: button-form;
     display: grid;
@@ -93,6 +93,13 @@
 }
 .button_create:hover { background-color: #3cc335; }
 .button_clear:hover { background-color: #cac9c9; }
+.text-exp {
+    grid-area: text-exp;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: 10px;
+}
 
 /* update */
 .modal {
