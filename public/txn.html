@@ -34,10 +34,10 @@
                 <ul id="selected-tickets-list"></ul>
             </div>
 
-            <!-- Promotion Selection (Dropdown) -->
+            <!-- Promotion Selection (Dropdown) - Optional -->
             <label for="pro-name">Promotion</label>
-            <select id="pro-name" required>
-                <option value="" disabled selected>Select a Promotion</option>
+            <select id="pro-name">
+                <option value="" disabled selected>Select a Promotion (Optional)</option>
             </select>
 
             <!-- Transaction Total Price and Number -->
@@ -124,19 +124,21 @@
                         // Get the promotion
                         const selectedPromo = document.getElementById('pro-name').value;
 
-                        // Apply promotion logic (for example, birthday discount or family pack)
-                        const birthdayEligible = checkCustomerPromotion();
-                        if (birthdayEligible) {
-                            totalPrice *= 0.5; // Apply birthday discount
-                        } else if (selectedPromo === 'Family pack' && totalTickets >= 5) {
-                            totalPrice *= 0.9; // Apply FamilyPack discount
+                        // Apply promotion logic (only if selectedPromo is not empty)
+                        if (selectedPromo) {
+                            const birthdayEligible = checkCustomerPromotion();
+                            if (birthdayEligible) {
+                                totalPrice *= 0.5; // Apply birthday discount
+                            } else if (selectedPromo === 'Family pack' && totalTickets >= 5) {
+                                totalPrice *= 0.9; // Apply FamilyPack discount
+                            }
                         }
 
                         // Prepare transaction data
                         const transactionData = {
                             cus_idcard: document.getElementById('cus-idcard').value,
                             selectedTickets: selectedTicketTypes,
-                            promotion: selectedPromo,
+                            promotion: selectedPromo || null,  // If no promotion selected, set to null
                             totalTickets: totalTickets,
                             totalPrice: totalPrice
                         };
@@ -237,7 +239,7 @@
                                 <td style="text-align: center;">${transaction.cus_idcard}</td>
                                 <td style="text-align: center;">${transaction.tk_type}</td>
                                 <td style="text-align: center;">${transaction.trans_num}</td>
-                                <td style="text-align: center;">${transaction.pro_name}</td>
+                                <td style="text-align: center;">${transaction.pro_name || 'No Promotion'}</td>
                                 <td style="text-align: center;">$${transaction.trans_totalPrice.toFixed(2)}</td>
                                 <td style="text-align: center;">
                                     <button class="btn btn-primary btn-sm">Update</button>
