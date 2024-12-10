@@ -364,3 +364,15 @@ app.delete('/api/customers/:id', async (req, res) => {
         res.status(500).send('Error deleting Customer');
     }
 });
+
+const validUsername = 'user';
+const validPassword = 'password';
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    if (username === validUsername && password === validPassword) {
+        res.redirect('/dashboard.html');
+    } else {
+        res.send('Invalid credentials. Please try again.');
+    }
+});
