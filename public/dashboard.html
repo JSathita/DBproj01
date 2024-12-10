@@ -4,22 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- link template -->
     <div id="nav-placeholder"></div>
     <content>
+        <div class="imageZC">
+            <div class="zoom-container">
+                <img src="map.png" alt="Amusement park" class="zoom-image"/>
+            </div>
+            <div class="conainer">
+                <div class="carousel-container">
+                    <div class="carousel-slide-container">
+                        
+                    <img src="createPromotion.jpg" class="carousel-img"/>
+                    <!-- add create promotion -->
+                    </div>
+                    <div class="carousel-dot">
+                        <span data-item="0" class="dot active"></span>
+                        <span data-item="1" class="dot"></span>
+                    </div>
+                    <div id="nextBtn" class="btn-right" style="margin-right: 10px;">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div id="prevBtn" class="btn-left" style="margin-left: 10px;">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+
+            <!-- Dashboard Title -->
+            <h2 class="section-title">Dashboard Overview</h2>
+        
+            <!-- Dashboard Section -->
+            <div class="dashboard-container">
+                
+                <!-- Places Card -->
+                <div class="dashboard-card">
+                    <h3>Places</h3>
+                    <p id="places-count">Loading...</p>
+                    <a href="#" class="action-btn">View Details</a>
+                </div>
+                
+                <!-- Reviews Card -->
+                <div class="dashboard-card">
+                    <h3>Reviews</h3>
+                    <p id="reviews-count">Loading...</p>
+                    <a href="#" class="action-btn">View Details</a>
+                </div>
+        
+                <!-- Tickets Card -->
+                <div class="dashboard-card">
+                    <h3>Tickets</h3>
+                    <p id="tickets-count">Loading...</p>
+                    <a href="#" class="action-btn">View Details</a>
+                </div>
+        
+                <!-- Customers Card -->
+                <div class="dashboard-card">
+                    <h3>Customers</h3>
+                    <p id="customers-count">Loading...</p>
+                    <a href="#" class="action-btn">View Details</a>
+                </div>
+        
+                <!-- Employees Card -->
+                <div class="dashboard-card">
+                    <h3>Employees</h3>
+                    <p id="employees-count">Loading...</p>
+                    <a href="#" class="action-btn">View Details</a>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div id="promotionModal" class="modal">
+            <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Create New Promotion</h2>
+            <form id="create-promotion-form">
+                <input class="Pro_id" type="text" id="promotion-id" placeholder="ID" required>
+                <input class="Pro_name" type="text" id="promotion-name" placeholder="Price" required>
+                <input class="Pro_dis" type="number" id="promotion-dis" placeholder="Discount" required>
+                <input class="Pro_photo" type="file" id="promotion-photo" placeholder="Photo" required>
+                <textarea class="Pro_cond" id="promotion-cond" placeholder="Terms and Conditions" required></textarea>
+                <div class="button-form">
+                <button class="button_clear" type="button">Clear</button>
+                <button class="button_create" type="submit">Create</button>
+                </div>
+            </form>
+            </div>
+        </div>
 
     </content>
     <script>
-        // link template
-        // Load template.html and inject into the placeholder
+        function fetchPromotions() {
+            fetch('http://localhost:3000/api/promotions')
+            .then(response => response.json())
+            .then(data => {
+                const carouselSlideContainer = document.querySelector('.carousel-slide-container');
+                carouselSlideContainer.innerHTML = '';  // Clear the current rows
+                data.forEach(promotion => {
+                    const img = document.createElement('img');
+                    img.src = promotion.pro_photo;
+                    img.classList.add('carousel-img');  // Add carousel-img class for styling
+                    carouselSlideContainer.appendChild(img);
+                });
+            })
+            .catch(error => console.error('Error fetching promotions:', error));
+        }
+
+        // Fetch promotions when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch promotions on page load
+            fetchPromotions();
+
+            // Select the specific image (or all carousel images)
+            const carouselImages = document.querySelectorAll('.carousel-img');
+
+            // Add a click listener to the createPromotion image
+            carouselImages.forEach((img) => {
+                if (img.src.includes('createPromotion.jpg')) {
+                    img.addEventListener('click', () => {
+                        openPromotionModal({});
+                    });
+                }
+            });
+        });
+
+        // Handle promotion creation
+        document.getElementById('create-promotion-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newPromotion = {
+                pro_id: document.getElementById('promotion-id').value,
+                pro_name: document.getElementById('promotion-name').value,
+                pro_discount: document.getElementById('promotion-dis').value,
+                pro_cond: document.getElementById('promotion-cond').value,
+                pro_photo: document.getElementById('promotion-photo').value
+            };
+            fetch('http://localhost:3000/api/promotions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newPromotion)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchPromotion();  // Reload the promotion list
+                alert('Promotion created successfully!');
+                document.getElementById('create-promotion-form').reset();
+            })
+            .catch(error => console.error('Error creating promotion:', error));
+        });
+        
+        //clear form
+        const clearButton = document.querySelector('.button_clear');
+        clearButton.addEventListener('click', function () {
+            document.getElementById('create-promotion-form').reset();  // Reset the form
+        });
+
+        function openPromotionModal(promotion) {
+            const modal = document.getElementById('promotionModal');
+            const promotionName = document.getElementById('promotion-name');
+            const promotionId = document.getElementById('promotion-id');
+            const promotionDiscount = document.getElementById('promotion-dis');
+            const promotionCondition = document.getElementById('promotion-cond');
+            const promotionPhoto = document.getElementById('promotion-photo');
+            
+            // Pre-fill the modal with promotion details if needed
+            promotionId.value = promotion.pro_id || '';
+            promotionName.value = promotion.pro_name || '';
+            promotionDiscount.value = promotion.pro_discount || '';
+            promotionCondition.value = promotion.pro_cond || '';
+            
+            // Show the modal
+            modal.style.display = 'block';
+
+            // Close modal when clicking on the close button
+            document.querySelector('.close-btn').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside of the modal
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    <script> //zoom img
+        // Select the container and image
+        const zoomContainer = document.querySelector(".zoom-container");
+        const zoomImage = document.querySelector(".zoom-image");
+        // Add mousemove event
+        zoomContainer.addEventListener("mousemove", (e) => {
+            const containerRect = zoomContainer.getBoundingClientRect(); // Get container dimensions
+            // Calculate mouse position relative to the container
+            const offsetX = e.clientX - containerRect.left;
+            const offsetY = e.clientY - containerRect.top;
+            // Ensure the mouse stays within the container's boundaries
+            const adjustedX = Math.max(0, Math.min(offsetX, containerRect.width));
+            const adjustedY = Math.max(0, Math.min(offsetY, containerRect.height));
+            // Calculate zoom scale and adjust image position
+            const zoomFactor = 2; // Adjust zoom level here
+            const imageWidth = zoomImage.offsetWidth * zoomFactor;
+            const imageHeight = zoomImage.offsetHeight * zoomFactor;
+            // Calculate the translation limits to keep zoom within edges
+            const maxTranslateX = Math.max(0, (imageWidth - containerRect.width) / zoomFactor);
+            const maxTranslateY = Math.max(0, (imageHeight - containerRect.height) / zoomFactor);
+
+            const translateX = Math.min(Math.max(adjustedX * (zoomFactor - 1), 0), maxTranslateX);
+            const translateY = Math.min(Math.max(adjustedY * (zoomFactor - 1), 0), maxTranslateY);
+            // Apply the zoom effect with bounds respected
+            zoomImage.style.transform = `scale(${zoomFactor}) translate(-${translateX}px, -${translateY}px)`;
+        });
+
+        // Reset zoom on mouse leave
+        zoomContainer.addEventListener("mouseleave", () => {
+            zoomImage.style.transform = "scale(1) translate(0, 0)";
+        });
+    </script>
+    <script> // link template
         fetch("template.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("nav-placeholder").innerHTML = data;
         })
         .catch(error => console.error('Error loading template:', error));
+    </script>
+    <script> //promotion
+        const images = document.querySelectorAll('.carousel-img');
+        const dots = document.querySelectorAll('.dot');
+
+        let count = 0;
+        let totalImg = images.length;
+        let width = images[0].clientWidth;
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+        moveSlide(-1);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+        moveSlide(1);
+        });
+
+        function moveSlide(direction) {
+        // count += direction;
+        // if (count >= totalImg) count = 0;
+        // if (count < 0) count = images.length - 1;
+        count = (count + direction + totalImg) % totalImg;
+        images.forEach((item) => {
+            item.style.transform = `translateX(${-count * width}px)`;
+        });
+
+        let dotActive = document.querySelector(`.dot[data-item="${count}"]`);
+        dots.forEach((d) => d.classList.remove('active'));
+        dotActive.classList.add('active');
+        }
+
+        dots.forEach((dot) => {
+        dot.addEventListener('click', function () {
+            dots.forEach((d) => d.classList.remove('active'));
+            dot.classList.add('active');
+
+            let itemValue = dot.dataset.item;
+            images.forEach((item) => {
+            item.style.transform = `translateX(${-itemValue * width}px)`;
+            });
+        });
+        });
     </script>
 </body>
 </html>
