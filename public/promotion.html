@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Promotion</title>
-    <link rel="stylesheet" href="ticket.css">
+    <link rel="stylesheet" href="promotion.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
@@ -12,15 +12,19 @@
     <!-- link template -->
     <div id="nav-placeholder"></div> 
     <content>    
-        <!-- Ticket Creation Form -->
+        <!-- Promotion Creation Form -->
         <div class="container-tiket">
-            <h2 style="font-size: 20px; font-weight: bold;">Create Ticket</h2>
-            <form id="create-ticket-form">
-                <input class="T_type" type="text" id="ticket-type" placeholder="Type" required>
-                <input class="T_price" type="number" id="ticket-price" placeholder="Price" required>
-                <input class="T_photo" type="file" id="ticket-photo" placeholder="Photo URL" required>
-                <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
-                <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
+            <h2 style="font-size: 20px; font-weight: bold;">Create Promotion</h2>
+            <div class="latest-id-container">
+                <h4>Latest Promotion ID :</h4>
+                <p id="latest-employee-id">No data yet</p>
+            </div>
+            <form id="create-promotion-form">
+                <input class="pro_id" type="text" id="promotion-id" placeholder="ID" required>
+                <input class="pro_name" type="text" id="promotion-name" placeholder="Name" required>
+                <input class="pro_discount" type="number" id="promotion-discount" placeholder="Discount" required>
+                <input class="pro_photo" type="file" id="promotion-photo" placeholder="Photo" required>
+                <textarea class="pro_cond" id="promotion-cond" placeholder="Terms and Conditions" required></textarea>
                 <div class="button-form">
                     <button class="button_clear" type="button">Clear</button>
                     <button class="button_create" type="submit">Create</button>
@@ -32,132 +36,132 @@
         <!-- เส้น -->
         <hr class="style1" style="margin-top: 40px;"> 
         
-        <!-- Tickets Table -->
-        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Tickets Detail</h2>
+        <!-- Promotions Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Promotions Information</h2>
         <div class="container mt-4" style="padding: 0;">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Price</th>
-                        <th>Photo</th>
+                        <th>ID</th>
                         <th>Name</th>
-                        <th>Detail</th>
+                        <th>Discount</th>
+                        <th>Photo</th>
+                        <th>Conditions</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="tickets-table-body">
+                <tbody id="promotions-table-body">
                     <!-- Dynamic rows will go here -->
                 </tbody>
             </table>
         </div>
         
-        <!-- Update Ticket Modal -->
+        <!-- Update Promotion Modal -->
         <div id="updateForm" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeUpdateForm()">&times;</span>
-                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 5px;">Update Ticket</h2>
-                <form id="updateTicketForm">
-                    <!-- <img class="img" src="" alt="Selected Photo" style="width: 100px; height: 100px; margin-bottom: 10px;"> -->
+                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 5px;">Update Promotion</h2>
+                <form id="updatePromotionForm">
+                    <label for="ID">ID :</label>
+                    <input type="text" id="updateID">
                     <label for="name">Name :</label>
                     <input type="text" id="updateName">
-                    <label for="type">Type :</label>
-                    <input type="text" id="updateType">
-                    <label for="price">Price :</label>
-                    <input type="number" id="updatePrice">
-                    <label for="photo">Photo URL :</label>
+                    <label for="discount">Discount :</label>
+                    <input type="number" id="updatediscount">
+                    <label for="photo">Photo :</label>
                     <input class="T_photo" type="file" id="updatePhoto">
-                    <label for="detail">Details :</label>
-                    <textarea id="updateDetail"></textarea>
+                    <label for="conditions">Terms and Conditions :</label>
+                    <textarea id="updatecond"></textarea>
                     <button type="submit" class="btn update" style="background: #589ff1;">Update</button>
                 </form>
             </div>
         </div>
 
         <script>
-            // Fetch and display tickets
-            function fetchTickets() {
-                fetch('http://localhost:3000/api/tickets')
+        // Fetch and display promotions
+        function fetchPromotions() {
+            fetch('http://localhost:3000/api/promotions')
                 .then(response => response.json())
                 .then(data => {
-                    const tableBody = document.getElementById('tickets-table-body');
-                    tableBody.innerHTML = '';  // Clear the current rows
-                    data.forEach(ticket => {
+                    const tableBody = document.getElementById('promotions-table-body');
+                    tableBody.innerHTML = ''; // Clear the current rows
+                    data.forEach(promotion => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td style="text-align: center;">${ticket.type}</td>
-                            <td style="text-align: center;">${ticket.price}</td>
-                            <td><img src="${ticket.photo}" class="img-fetch" alt="Photo" style="width: 50px; height: 50px; text-align: center;"></td>
-                            <td>${ticket.name}</td>
-                            <td>${ticket.detail}</td>
+                            <td style="text-align: center;">${promotion.pro_id}</td>
+                            <td style="text-align: center;">${promotion.pro_name}</td>
+                            <td style="text-align: center;">${promotion.pro_discount}</td>
+                            <td><img src="${promotion.pro_photo}" class="img-fetch" alt="Photo" style="width: 50px; height: 50px; text-align: center;"></td>
+                            <td>${promotion.pro_cond}</td>
                             <td style="text-align: center; justify-content: center; padding: 12px 0px;">
-                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${ticket._id}')">Update</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteTicket('${ticket._id}')">Delete</button>
+                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${promotion._id}')">Update</button>
+                                <button class="btn btn-danger btn-sm" onclick="deletePromotion('${promotion._id}')">Delete</button>
                             </td>`;
-                            tableBody.appendChild(row);
+                        tableBody.appendChild(row);
                     });
                 })
-                .catch(error => console.error('Error fetching tickets:', error));
-            }
+            .catch(error => console.error('Error fetching promotions:', error));
+        }
 
-        // Fetch tickets when the page loads
-        document.addEventListener('DOMContentLoaded', fetchTickets);
+        // Fetch promotions when the page loads
+        document.addEventListener('DOMContentLoaded', fetchPromotions);
 
-        // Handle ticket creation
-        document.getElementById('create-ticket-form').addEventListener('submit', function (e) {
+        // Handle promotion creation
+        document.getElementById('create-promotion-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            const newTicket = {
-                type: document.getElementById('ticket-type').value,
-                price: document.getElementById('ticket-price').value,
-                photo: document.getElementById('ticket-photo').value,
-                name: document.getElementById('ticket-name').value,
-                detail: document.getElementById('ticket-detail').value
+            const newPromotion = {
+                pro_id: document.getElementById('promotion-id').value,
+                pro_name: document.getElementById('promotion-name').value,
+                pro_discount: document.getElementById('promotion-discount').value,
+                pro_cond: document.getElementById('promotion-cond').value,
+                pro_photo: document.getElementById('promotion-photo').value
             };
-            fetch('http://localhost:3000/api/tickets', {
+            fetch('http://localhost:3000/api/promotions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(newTicket)
+                body: JSON.stringify(newPromotion)
             })
             .then(response => response.json())
             .then(() => {
-                fetchTickets();  // Reload the ticket list
-                alert('Ticket created successfully!');
-                document.getElementById('create-ticket-form').reset();
+                fetchPromotions();  // Reload the promotion list
+                alert('promotion created successfully!');
+                document.getElementById('create-promotion-form').reset();
             })
-            .catch(error => console.error('Error creating ticket:', error));
+            .catch(error => console.error('Error creating promotion:', error));
         });
 
         //clear form
         const clearButton = document.querySelector('.button_clear');
         clearButton.addEventListener('click', function () {
-            document.getElementById('create-ticket-form').reset();  // Reset the form
+            document.getElementById('create-promotion-form').reset();  // Reset the form
         });
 
-        // Handle ticket deletion
-        function deleteTicket(id) {
-            fetch(`http://localhost:3000/api/tickets/${id}`, {
+        // Handle promotion deletion
+        function deletePromotion(id) {
+            fetch(`http://localhost:3000/api/promotions/${id}`, {
                 method: 'DELETE'
             })
-            .then(() => fetchTickets())  // Reload tickets after deletion
-            .catch(error => console.error('Error deleting ticket:', error));
+            .then(() => fetchPromotions())  // Reload promotions after deletion
+            .catch(error => console.error('Error deleting promotion:', error));
         }
             
         function openUpdateForm(id) {
-            currentTicketId = id;
+            currentPromotionId = id;  // Set the currentPromotionId globally
             document.getElementById('updateForm').style.display = 'flex';
-            // Fetch existing ticket details to pre-fill the form
-                fetch(`http://localhost:3000/api/tickets/${id}`)
+
+            // Fetch existing promotion details to pre-fill the form
+            fetch(`http://localhost:3000/api/promotions/${id}`)
                 .then(response => response.json())
-                .then(ticket => {
-                    document.getElementById('updateName').value = ticket.name;
-                    document.getElementById('updateType').value = ticket.type;
-                    document.getElementById('updatePrice').value = ticket.price;
-                    document.getElementById('updatePhoto').value = ticket.photo;
-                    document.getElementById('updateDetail').value = ticket.detail;
+                .then(promotion => {
+                    document.getElementById('updateID').value = promotion.pro_id;
+                    document.getElementById('updateName').value = promotion.pro_name;
+                    document.getElementById('updatediscount').value = promotion.pro_discount;
+                    document.getElementById('updatePhoto').value = promotion.pro_photo; // Will show file name, but cannot pre-load the actual file
+                    document.getElementById('updatecond').value = promotion.pro_cond;
                 })
-                .catch(error => console.error('Error fetching ticket:', error));
+                .catch(error => console.error('Error fetching promotion details:', error));
         }
 
         // Close Update Form
@@ -165,50 +169,47 @@
             document.getElementById('updateForm').style.display = 'none';
         }
 
-        // Handle Form Submission
-        document.getElementById('updateTicketForm').addEventListener('submit', (e) => {
+        // Handle Form Submission for Update Promotion
+        document.getElementById('updatePromotionForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Create an object to store updated ticket data
-            const updatedTicket = {};
-
-            // Check each input field and add it to the object only if it has a value
+            // Create a FormData object to handle file uploads
+            const formData = new FormData();
+            // Add the updated promotion data to formData if there's a value
+            const IDValue = document.getElementById('updateID').value;
+            if (IDValue) formData.append('pro_id', IDValue);
             const nameValue = document.getElementById('updateName').value;
-            if (nameValue) updatedTicket.name = nameValue;
-            const typeValue = document.getElementById('updateType').value;
-            if (typeValue) updatedTicket.type = typeValue;
-            const priceValue = document.getElementById('updatePrice').value;
-            if (priceValue) updatedTicket.price = priceValue;
-            const photoValue = document.getElementById('updatePhoto').value;
-            if (photoValue) updatedTicket.photo = photoValue;
-            const detailValue = document.getElementById('updateDetail').value;
-            if (detailValue) updatedTicket.detail = detailValue;
+            if (nameValue) formData.append('pro_name', nameValue);
+            const disValue = document.getElementById('updatediscount').value;
+            if (disValue) formData.append('pro_discount', disValue);
+            const photoValue = document.getElementById('updatePhoto').files[0];  // Get the file
+            if (photoValue) formData.append('pro_photo', photoValue);
+            const condValue = document.getElementById('updatecond').value;
+            if (condValue) formData.append('pro_cond', condValue);
             // Check if there's at least one field to update
-            if (Object.keys(updatedTicket).length === 0) {
+            if (formData.entries().next().done) {
                 alert('Please fill in at least one field to update.');
                 return;
             }
-            // Send update request to the server
-            fetch(`http://localhost:3000/api/tickets/${currentTicketId}`, {
+            // Send the update request to the server using PUT method
+            fetch(`http://localhost:3000/api/promotions/${currentPromotionId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedTicket),
+                body: formData,  // Send the FormData which includes both text and file data
             })
-                .then((response) => {
-                    if (response.ok) {
-                        // Reset input fields
-                        const inputs = document.querySelectorAll('#updateTicketForm input');
-                        inputs.forEach((input) => (input.value = ''));
-                        // Close the form and reload the tickets
-                        closeUpdateForm();
-                        fetchTickets();
-                        alert('Update successful!');
-                    } else {
-                        alert('Failed to update. Please try again.');
-                    }
-                })
-                .catch((error) => console.error('Error updating ticket:', error));
+            .then((response) => {
+                if (response.ok) {
+                    // Reset input fields after successful update
+                    const inputs = document.querySelectorAll('#updatePromotionForm input, #updatePromotionForm textarea');
+                    inputs.forEach((input) => input.value = '');
+                    document.getElementById('updatePhoto').value = ''; // Reset file input
+                    // Close the form and reload promotions
+                    closeUpdateForm();
+                    fetchPromotions();
+                    alert('Update successful!');
+                } else {
+                    alert('Failed to update. Please try again.');
+                }
+            })
+            .catch((error) => console.error('Error updating promotion:', error));
         });
 
         // link template
