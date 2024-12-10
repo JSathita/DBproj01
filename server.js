@@ -58,10 +58,11 @@ const placeSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    place_detailCond: String,
+    place_detailCond: String
 })
 const reviewSchema = new mongoose.Schema({
     rev_name: { type: String, required: true, trim: true },
+    rev_topic: { type: String, required: true, trim: true },
     rev_detail: { type: String, required: true, trim: true },
     rev_date: { type: String, required: true, trim: true },
     rev_completedate: { type: String, default: '', trim: true },
@@ -70,6 +71,7 @@ const reviewSchema = new mongoose.Schema({
     rev_status: Boolean
 });
 const empSchema = new mongoose.Schema({
+    emp_id: { type: String, required: true, trim: true },
     emp_name: { type: String, required: true, trim: true },
     depm_ID: { type: String, required: true, trim: true },
     shift_ID: { type: String, required: true, trim: true },
@@ -85,14 +87,24 @@ const cusSchema = new mongoose.Schema({
     cus_phone: { type: String, default: '', trim: true },
     cus_email: { type: String, default: '', trim: true },
     cus_idcard: { type: String, default: '', trim: true },
-    cus_apDate: { type: Date, required: true },
+    cus_apDate: { type: Date, required: true }
 })
+const transactionSchema = new mongoose.Schema({
+    cus_idcard: String, // Customer idcard
+    tk_type: String, // Ticket Type
+    trans_num: Number, // Transaction Number
+    pro_name: String, // Promotion Name
+    trans_totalPrice: Number, // Total Price
+    trans_status: Boolean,
+    trans_date: { type: Date, required: true }
+});
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
 const Place = mongoose.model('Place',placeSchema);
 const Review = mongoose.model('Review', reviewSchema);
 const Employee = mongoose.model('Employee', empSchema);
 const Customer = mongoose.model('Customer', cusSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 // API Route to fetch items
 app.get('/api/tickets', async (req, res) => {
@@ -133,6 +145,14 @@ app.get('/api/customers', async (req, res) => {
         res.json(customers);
     } catch (error) {
         res.status(500).send('Error fetching data');
+    }
+});
+app.get('/api/transactions', async (req, res) => {
+    try {
+    const transactions = await Transaction.find();
+    res.json(transactions); // Send all transactions as JSON
+    } catch (error) {
+    res.status(500).send('Error fetching transactions');
     }
 });
 
@@ -196,6 +216,16 @@ app.post('/api/customers', async (req, res) => {
         res.status(400).send('Error creating customer');
     }
 });
+//Create a new transaction
+app.post('/api/transactions', async (req, res) => {
+    try {
+        const transaction = new Transaction(req.body);
+        await transaction.save();
+        res.status(201).json(transaction);  // Return the newly created transaction
+    } catch (error) {
+        res.status(400).send('Error creating transaction');
+    }
+});
 
 // 2. Get all tickets (Read)
 app.get('/api/tickets', async (req, res) => {
@@ -240,6 +270,15 @@ app.get('/api/customers', async (req, res) => {
         res.json(customers);  // Send the data as JSON
     } catch (error) {
         res.status(500).send('Error fetching customers');
+    }
+});
+// Get all transactions (Read)
+app.get('/api/transactions', async (req, res) => {
+    try {
+        const transactions = await Transaction.find();
+        res.json(transactions); // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching transactions');
     }
 });
 
@@ -303,6 +342,18 @@ app.put('/api/customers/:id', async (req, res) => {
         res.status(400).send('Error updating Customer');
     }
 });
+// Update a transaction by ID
+app.put('/api/transactions/:id', async (req, res) => {
+    try {
+        const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedTransaction) {
+            return res.status(404).send('Transaction not found');
+        }
+        res.json(updatedTransaction);  // Return the updated transaction
+    } catch (error) {
+        res.status(400).send('Error updating transaction');
+    }
+});
 
 // 4. Delete a ticket by ID
 app.delete('/api/tickets/:id', async (req, res) => {
@@ -362,6 +413,18 @@ app.delete('/api/customers/:id', async (req, res) => {
         res.json({ message: 'Customer deleted successfully' });  // Send success message
     } catch (error) {
         res.status(500).send('Error deleting Customer');
+    }
+});
+// 4. Delete a transaction by ID
+app.delete('/api/transactions/:id', async (req, res) => {
+    try {
+        const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
+        if (!deletedTransaction) {
+            return res.status(404).send('Transaction not found');
+        }
+    res.json({ message: 'Transaction deleted successfully' });  // Send success message
+    } catch (error) {
+        res.status(500).send('Error deleting transaction');
     }
 });
 
