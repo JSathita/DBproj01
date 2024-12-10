@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee</title>
-    <link rel="stylesheet" href="employee.css">
+    <title>Customer</title>
+    <link rel="stylesheet" href="customer.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
@@ -12,69 +12,266 @@
     <!-- link template -->
     <div id="nav-placeholder"></div> 
     <content>
-        <!-- Ticket Creation Form -->
+        <!-- Customer Creation Form -->
         <div class="container-tiket">
-            <h2 style="font-size: 20px; font-weight: bold;">Add Employee</h2>
-            <form id="create-ticket-form">
-                <input class="T_type" type="text" id="ticket-type" placeholder="Type" required>
-                <input class="T_price" type="number" id="ticket-price" placeholder="Price" required>
-                <input class="T_photo" type="file" id="ticket-photo" placeholder="Photo URL" required>
-                <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
-                <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
+            <h2 style="font-size: 20px; font-weight: bold;">Add Customer</h2>
+            <!-- Display Latest Customer ID -->
+            <div class="latest-id-container">
+                <h4>Latest Customer ID :</h4>
+                <p id="latest-customer-id">No data yet</p>
+            </div>
+            <form id="create-customer-form">
+                <input class="C_id" type="text" id="customer-id" placeholder="ID" required>
+                <input class="C_name" type="text" id="customer-name" placeholder="Name" required>
+                <input class="C_dateofbirth" type="date" id="customer-dateofbirth" placeholder="Date of birth" required>
+                <input class="C_phone" type="text" id="customer-phone" placeholder="Telephone number" required>
+                <input class="C_email" type="email" id="customer-email" placeholder="Email" required>
+                <input class="C_idcard" type="text" id="customer-idcard" placeholder="ID card" required>
                 <div class="button-form">
                     <button class="button_clear" type="button">Clear</button>
                     <button class="button_create" type="submit">Create</button>
                 </div>
-                <text class="text-exp" style="text-align: center; margin: 0px;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
+                <text class="text-exp" style="text-align: center; margin: 0px;">[Date of Birth (Please enter in the format MM/DD/YYYY)]</text>
             </form>
         </div>
 
         <!-- เส้น -->
         <hr class="style1" style="margin-top: 40px;"> 
         
-        <!-- Tickets Table -->
-        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Tickets Detail</h2>
+        <!-- Customers Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Customers Detail</h2>
         <div class="container mt-4" style="padding: 0;">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Price</th>
-                        <th>Photo</th>
+                        <th>ID</th>
                         <th>Name</th>
-                        <th>Detail</th>
+                        <th>Birthday</th>
+                        <th>Tel.</th>
+                        <th>Email</th>
+                        <th>ID card</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="tickets-table-body">
+                <tbody id="customers-table-body">
                     <!-- Dynamic rows will go here -->
                 </tbody>
             </table>
         </div>
         
-        <!-- Update Ticket Modal -->
+        <!-- Update Customer Modal -->
         <div id="updateForm" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeUpdateForm()">&times;</span>
-                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Update Ticket</h2>
-                <form id="updateTicketForm">
-                    <!-- <img class="img" src="" alt="Selected Photo" style="width: 100px; height: 100px; margin-bottom: 10px;"> -->
+                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Edit Information</h2>
+                <form id="updateCustomerForm">
+                    <label for="ID">ID :</label>
+                    <input type="text" id="updateID">
                     <label for="name">Name :</label>
                     <input type="text" id="updateName">
-                    <label for="type">Type :</label>
-                    <input type="text" id="updateType">
-                    <label for="price">Price :</label>
-                    <input type="number" id="updatePrice">
-                    <label for="photo">Photo URL :</label>
-                    <input class="T_photo" type="file" id="updatePhoto">
-                    <label for="detail">Details :</label>
-                    <textarea id="updateDetail"></textarea>
+                    <label for="dateofbirth">Birthday :</label>
+                    <input type="date" id="updateBirthday">
+                    <label for="phone">Telephone number :</label>
+                    <input type="number" id="updateTel">
+                    <label for="email">Email :</label>
+                    <input type="email" id="updateEmail">
+                    <label for="idcard">ID card :</label>
+                    <input type="text" id="updateIDcard">
                     <button type="submit" class="btn update" style="background: #589ff1;">Update</button>
                 </form>
             </div>
         </div>
     </content>
     <script>
+        // Fetch and display customers
+        function fetchCustomers() {
+            fetch('http://localhost:3000/api/customers')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('customers-table-body');
+                    tableBody.innerHTML = ''; // Clear the current rows
+
+                    if (data.length > 0) {
+                        // Get the latest customer based on the last entry in the array
+                        const latestCustomer = data[data.length - 1];
+                        document.getElementById('latest-customer-id').textContent = latestCustomer.cus_id;
+                    } else {
+                        document.getElementById('latest-customer-id').textContent = 'No data yet';
+                    }
+
+                    // Render customer rows
+                    data.forEach(customer => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="text-align: center;">${customer.cus_id}</td>
+                            <td>${customer.cus_name}</td>
+                            <td style="text-align: center;">${customer.cus_dateofbirth}</td>
+                            <td style="text-align: center;">${customer.cus_phone}</td>
+                            <td style="text-align: center;">${customer.cus_email}</td>
+                            <td style="text-align: center;">${customer.cus_idcard}</td>
+                            <td style="text-align: center; justify-content: center; padding: 12px 0px;">
+                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${customer._id}')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${customer._id}')">Delete</button>
+                            </td>`;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching customers:', error));
+        }
+
+        // Fetch customers when the page loads
+        document.addEventListener('DOMContentLoaded', fetchCustomers);
+
+        // Handle customer creation
+        document.getElementById('create-customer-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission behavior
+            if (!validateForm()) return;
+            // Gather customer data from the form
+            const newCustomer = {
+                cus_id: document.getElementById('customer-id').value.trim(),
+                cus_name: document.getElementById('customer-name').value.trim(),
+                cus_dateofbirth: document.getElementById('customer-dateofbirth').value.trim(),
+                cus_phone: document.getElementById('customer-phone').value.trim(),
+                cus_email: document.getElementById('customer-email').value.trim(),
+                cus_idcard: document.getElementById('customer-idcard').value.trim(),
+                cus_apDate: new Date().toISOString() // Automatically set the current date
+            };
+
+            // Debug: Log the payload being sent
+            console.log('New Customer Data:', newCustomer);
+
+            // Validate required fields
+            for (const key in newCustomer) {
+                if (!newCustomer[key]) {
+                    alert(`Please fill in the ${key.replace('cus_', '').toUpperCase()} field.`);
+                    return;
+                }
+            }
+
+            // Send POST request to create a new customer
+            fetch('http://localhost:3000/api/customers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newCustomer)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to create customer.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Customer created:', data);
+                    fetchCustomers(); // Reload the customer list
+                    alert('Customer created successfully!');
+                    document.getElementById('create-customer-form').reset(); // Clear the form
+                })
+                .catch(error => {
+                    console.error('Error creating customer:', error);
+                    alert('Failed to create customer. Please try again.');
+                });
+        });
+
+        // Ensure that date, phone, and email inputs are valid
+        const validateForm = () => {
+            const phone = document.getElementById('customer-phone').value.trim();
+            // Validate phone number (10 digits)
+            if (!/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit telephone number.');
+                return false;
+            }
+            return true;
+        };
+
+        // Handle customer deletion
+        function deleteCustomer(id) {
+            fetch(`http://localhost:3000/api/customers/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => fetchCustomers())  // Reload customers after deletion
+            .catch(error => console.error('Error deleting customer:', error));
+        }
+
+        function openUpdateForm(id) {
+            currentCustomerId = id;
+            document.getElementById('updateForm').style.display = 'flex';
+            // Fetch existing customer details to pre-fill the form
+                fetch(`http://localhost:3000/api/customers/${id}`)
+                .then(response => response.json())
+                .then(customer => {
+                    document.getElementById('updateID').value = customer.cus_id;
+                    document.getElementById('updateName').value = customer.cus_name;
+                    document.getElementById('updateBirthday').value = customer.cus_dateofbirth;
+                    document.getElementById('updateTel').value = customer.cus_phone;
+                    document.getElementById('updateEmail').value = customer.cus_email;
+                    document.getElementById('updateIDcard').value = customer.cus_idcard;
+                })
+                .catch(error => console.error('Error fetching customer:', error));
+        }
+
+        // Close Update Form
+        function closeUpdateForm() {
+            document.getElementById('updateForm').style.display = 'none';
+        }
+
+        // Handle Form Submission
+        document.getElementById('updateCustomerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Create an object to store updated customer data
+            const updatedCustomer = {};
+
+            // Check each input field and add it to the object only if it has a new value
+            const idValue = document.getElementById('updateID').value; // ID field (not typically updated, but included here)
+            if (idValue) updatedCustomer.cus_id = idValue;
+            const nameValue = document.getElementById('updateName').value;
+            if (nameValue) updatedCustomer.cus_name = nameValue;
+            const birthdayValue = document.getElementById('updateBirthday').value;
+            if (birthdayValue) updatedCustomer.cus_dateofbirth = birthdayValue;
+            const telValue = document.getElementById('updateTel').value;
+            if (telValue) updatedCustomer.cus_phone = telValue;
+            const emailValue = document.getElementById('updateEmail').value;
+            if (emailValue) updatedCustomer.cus_email = emailValue;
+            const idCardValue = document.getElementById('updateIDcard').value;
+            if (idCardValue) updatedCustomer.cus_idcard = idCardValue;
+
+            // Check if there's at least one field to update
+            if (Object.keys(updatedCustomer).length === 0) {
+                alert('Please fill in at least one field to update.');
+                return;
+            }
+
+            // Send update request to the server
+            fetch(`http://localhost:3000/api/customers/${currentCustomerId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedCustomer),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        // Reset input fields
+                        const inputs = document.querySelectorAll('#updateCustomerForm input');
+                        inputs.forEach((input) => (input.value = ''));
+                        // Close the form and reload the customers
+                        closeUpdateForm();
+                        fetchCustomers();
+                        alert('Update successful!');
+                    } else {
+                        alert('Failed to update. Please try again.');
+                    }
+                })
+                .catch((error) => console.error('Error updating customer:', error));
+        });
+
+        // Handle Clear button click
+        document.querySelector('.button_clear').addEventListener('click', function () {
+            document.getElementById('create-customer-form').reset(); // Reset the form
+        });
+
         // link template
         // Load template.html and inject into the placeholder
         fetch("template.html")
@@ -86,4 +283,5 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>
 </html>
