@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket</title>
+    <link rel="stylesheet" href="ticket.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- link template -->
+    <div id="nav-placeholder"></div> 
+    <content>    
+        <!-- Ticket Creation Form -->
+        <div class="container-tiket">
+            <h2 style="font-size: 20px; font-weight: bold;">Create Ticket</h2>
+            <form id="create-ticket-form">
+                <input class="T_type" type="text" id="ticket-type" placeholder="Type" required>
+                <input class="T_price" type="number" id="ticket-price" placeholder="Price" required>
+                <input class="T_photo" type="file" id="ticket-photo" placeholder="Photo URL" required>
+                <input class="T_name" type="text" id="ticket-name" placeholder="Name" required>
+                <textarea class="T_detail" id="ticket-detail" placeholder="Detail" required></textarea>
+                <div class="button-form">
+                    <button class="button_clear" type="button">Clear</button>
+                    <button class="button_create" type="submit">Create</button>
+                </div>
+                <text class="text-exp" style="text-align: center; margin: 0px;">[AP : Annual Pass | DP : Daily Pass | C : Children | A : Adult | P : Pay-per-Ride | R : Ride Pass]</text>
+            </form>
+        </div>
+
+        <!-- เส้น -->
+        <hr class="style1" style="margin-top: 40px;"> 
+        
+        <!-- Tickets Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Tickets Detail</h2>
+        <div class="container mt-4" style="padding: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Detail</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tickets-table-body">
+                    <!-- Dynamic rows will go here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Update Ticket Modal -->
+        <div id="updateForm" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeUpdateForm()">&times;</span>
+                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 5px;">Update Ticket</h2>
+                <form id="updateTicketForm">
+                    <!-- <img class="img" src="" alt="Selected Photo" style="width: 100px; height: 100px; margin-bottom: 10px;"> -->
+                    <label for="name">Name :</label>
+                    <input type="text" id="updateName">
+                    <label for="type">Type :</label>
+                    <input type="text" id="updateType">
+                    <label for="price">Price :</label>
+                    <input type="number" id="updatePrice">
+                    <label for="photo">Photo URL :</label>
+                    <input class="T_photo" type="file" id="updatePhoto">
+                    <label for="detail">Details :</label>
+                    <textarea id="updateDetail"></textarea>
+                    <button type="submit" class="btn update" style="background: #589ff1;">Update</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            // Fetch and display tickets
+            function fetchTickets() {
+                fetch('http://localhost:3000/api/tickets')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('tickets-table-body');
+                    tableBody.innerHTML = '';  // Clear the current rows
+                    data.forEach(ticket => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="text-align: center;">${ticket.type}</td>
+                            <td style="text-align: center;">${ticket.price}</td>
+                            <td><img src="${ticket.photo}" class="img-fetch" alt="Photo" style="width: 50px; height: 50px; text-align: center;"></td>
+                            <td>${ticket.name}</td>
+                            <td>${ticket.detail}</td>
+                            <td style="text-align: center; justify-content: center; padding: 12px 0px;">
+                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${ticket._id}')">Update</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteTicket('${ticket._id}')">Delete</button>
+                            </td>`;
+                            tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching tickets:', error));
+            }
+
+        // Fetch tickets when the page loads
+        document.addEventListener('DOMContentLoaded', fetchTickets);
+
+        // Handle ticket creation
+        document.getElementById('create-ticket-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newTicket = {
+                type: document.getElementById('ticket-type').value,
+                price: document.getElementById('ticket-price').value,
+                photo: document.getElementById('ticket-photo').value,
+                name: document.getElementById('ticket-name').value,
+                detail: document.getElementById('ticket-detail').value
+            };
+            fetch('http://localhost:3000/api/tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newTicket)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchTickets();  // Reload the ticket list
+                alert('Ticket created successfully!');
+                document.getElementById('create-ticket-form').reset();
+            })
+            .catch(error => console.error('Error creating ticket:', error));
+        });
+
+        //clear form
+        const clearButton = document.querySelector('.button_clear');
+        clearButton.addEventListener('click', function () {
+            document.getElementById('create-ticket-form').reset();  // Reset the form
+        });
+
+        // Handle ticket deletion
+        function deleteTicket(id) {
+            fetch(`http://localhost:3000/api/tickets/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => fetchTickets())  // Reload tickets after deletion
+            .catch(error => console.error('Error deleting ticket:', error));
+        }
+
+        // Show the update form for a ticket > old code
+            // function showUpdateForm(id) {
+            //     const newName = prompt('Enter new ticket name:');
+            //     const newType = prompt('Enter new ticket type:');
+            //     const newPrice = prompt('Enter new ticket price:');
+            //     const newPhoto = prompt('Enter new ticket photo URL:');
+            //     const newDetail = prompt('Enter new ticket details:');
+
+            //     if (newName && newType && newPrice && newPhoto && newDetail) {
+            //         const updatedTicket = {
+            //             name: newName,
+            //             type: newType,
+            //             price: newPrice,
+            //             photo: newPhoto,
+            //             detail: newDetail
+            //         };
+
+            //         // Update the ticket using PUT request
+            //         fetch(`http://localhost:3000/api/tickets/${id}`, {
+            //             method: 'PUT',
+            //             headers: {
+            //                 'Content-Type': 'application/json'
+            //             },
+            //             body: JSON.stringify(updatedTicket)
+            //         })
+            //         .then(() => fetchTickets())  // Reload tickets after update
+            //         .catch(error => console.error('Error updating ticket:', error));
+            //     }
+            // }
+            // Open Update Form
+            
+        function openUpdateForm(id) {
+            currentTicketId = id;
+            document.getElementById('updateForm').style.display = 'flex';
+            // Fetch existing ticket details to pre-fill the form
+                fetch(`http://localhost:3000/api/tickets/${id}`)
+                .then(response => response.json())
+                .then(ticket => {
+                    document.getElementById('updateName').value = ticket.name;
+                    document.getElementById('updateType').value = ticket.type;
+                    document.getElementById('updatePrice').value = ticket.price;
+                    document.getElementById('updatePhoto').value = ticket.photo;
+                    document.getElementById('updateDetail').value = ticket.detail;
+                })
+                .catch(error => console.error('Error fetching ticket:', error));
+        }
+
+        // Close Update Form
+        function closeUpdateForm() {
+            document.getElementById('updateForm').style.display = 'none';
+        }
+
+        // Handle Form Submission
+        document.getElementById('updateTicketForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Create an object to store updated ticket data
+            const updatedTicket = {};
+
+            // Check each input field and add it to the object only if it has a value
+            const nameValue = document.getElementById('updateName').value;
+            if (nameValue) updatedTicket.name = nameValue;
+            const typeValue = document.getElementById('updateType').value;
+            if (typeValue) updatedTicket.type = typeValue;
+            const priceValue = document.getElementById('updatePrice').value;
+            if (priceValue) updatedTicket.price = priceValue;
+            const photoValue = document.getElementById('updatePhoto').value;
+            if (photoValue) updatedTicket.photo = photoValue;
+            const detailValue = document.getElementById('updateDetail').value;
+            if (detailValue) updatedTicket.detail = detailValue;
+            // Check if there's at least one field to update
+            if (Object.keys(updatedTicket).length === 0) {
+                alert('Please fill in at least one field to update.');
+                return;
+            }
+            // Send update request to the server
+            fetch(`http://localhost:3000/api/tickets/${currentTicketId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedTicket),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        // Reset input fields
+                        const inputs = document.querySelectorAll('#updateTicketForm input');
+                        inputs.forEach((input) => (input.value = ''));
+                        // Close the form and reload the tickets
+                        closeUpdateForm();
+                        fetchTickets();
+                        alert('Update successful!');
+                    } else {
+                        alert('Failed to update. Please try again.');
+                    }
+                })
+                .catch((error) => console.error('Error updating ticket:', error));
+        });
+
+        // link template
+        // Load template.html and inject into the placeholder
+        fetch("template.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("nav-placeholder").innerHTML = data;
+        })
+        .catch(error => console.error('Error loading template:', error));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </content>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee</title>
+    <link rel="stylesheet" href="employee.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- link template -->
+    <div id="nav-placeholder"></div> 
+    <content>
+        <!-- Employee Creation Form -->
+        <div class="container-tiket">
+            <h2 style="font-size: 20px; font-weight: bold;">Add Employee</h2>
+            <!-- Display Latest Employee ID -->
+            <div class="latest-id-container">
+                <h4>Latest Employee ID :</h4>
+                <p id="latest-employee-id">No data yet</p>
+            </div>
+            <form id="create-employee-form">
+                <input class="E_id" type="text" id="employee-id" placeholder="ID" required>
+                <input class="E_name" type="text" id="employee-name" placeholder="Name" required>
+                <div class="E_dept">
+                    <label>Select Department :</label>
+                    <label>
+                        <input type="radio" name="se-dept" value="Manager" />
+                        <span>Manager</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="se-dept" value="Staff" />
+                        <span>Staff</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="se-dept" value="Seller" />
+                        <span>Seller</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="se-dept" value="Engineer" />
+                        <span>Engineer</span>
+                    </label>
+                </div>
+                <div class="E_shift">
+                    <label>Select Shift :</label>
+                    <label>
+                        <input type="radio" name="se-shift" value="8:00 AM - 2:00 PM" />
+                        <span>Morning</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="se-shift" value="2:00 PM - 8:00 PM" />
+                        <span>Afternoon</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="se-shift" value="8:00 PM - 2:00 AM" />
+                        <span>Evening</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="se-shift" value="2:00 AM - 8:00 AM" />
+                        <span>Night</span>
+                    </label>
+                </div>
+                <input class="E_phone" type="text" id="employee-phone" placeholder="Telephone number" required>
+                <input class="E_mail" type="email" id="employee-email" placeholder="Email" required>
+                <textarea class="E_address" id="employee-address" placeholder="Address" required></textarea>
+                <div class="button-form">
+                    <button class="button_clear" type="button">Clear</button>
+                    <button class="button_create" type="submit">Create</button>
+                </div>
+                <text class="text-exp" style="text-align: center; margin: 0px;">[Date of employment (Please enter in the format MM/DD/YYYY)]</text>
+            </form>
+        </div>
+
+        <!-- เส้น -->
+        <hr class="style1" style="margin-top: 40px;"> 
+        
+        <!-- Employees Table -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Employees Detail</h2>
+        <div class="container mt-4" style="padding: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Shift</th>
+                        <th>Start</th>
+                        <th>Tel</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employees-table-body">
+                    <!-- Dynamic rows will go here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Update Employee Modal -->
+        <div id="updateForm" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeUpdateForm()">&times;</span>
+                <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 5px;">Edit Information</h2>
+                <form id="updateEmployeeForm">
+                    <label for="ID">ID :</label>
+                    <input type="text" id="updateID">
+                    <label for="name">Name :</label>
+                    <input type="text" id="updateName">
+                    <div class="E_depti">
+                        <label>Department :</label>
+                        <label>
+                            <input type="radio" name="se-dept" value="Manager" />
+                            <span>Manager</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="se-dept" value="Staff" />
+                            <span>Staff</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="se-dept" value="Seller" />
+                            <span>Seller</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="se-dept" value="Engineer" />
+                            <span>Engineer</span>
+                        </label>
+                    </div>
+                    <div class="E_shift">
+                        <label>Shift :</label>
+                        <label>
+                            <input type="radio" name="se-shift" value="8:00 AM - 2:00 PM" />
+                            <span>Morning</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="se-shift" value="2:00 PM - 8:00 PM" />
+                            <span>Afternoon</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="se-shift" value="8:00 PM - 2:00 AM" />
+                            <span>Evening</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="se-shift" value="2:00 AM - 8:00 AM" />
+                            <span>Night</span>
+                        </label>
+                    </div>
+                    <label for="phone">Telephone number :</label>
+                    <input type="number" id="updateTel">
+                    <label for="email">Email :</label>
+                    <input type="email" id="updateEmail">
+                    <label for="address">Address :</label>
+                    <textarea id="updateAddress"></textarea>
+                    <button type="submit" class="btn update" style="background: #589ff1;">Update</button>
+                </form>
+            </div>
+        </div>
+    </content>
+    <script>
+        // Fetch and display employees
+        function fetchEmployees() {
+            fetch('http://localhost:3000/api/employees')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('employees-table-body');
+                    tableBody.innerHTML = ''; // Clear the current rows
+
+                    if (data.length > 0) {
+                        // Get the latest employee based on the last entry in the array
+                        const latestEmployee = data[data.length - 1];
+                        document.getElementById('latest-employee-id').textContent = latestEmployee.emp_id;
+                    } else {
+                        document.getElementById('latest-employee-id').textContent = 'No data yet';
+                    }
+
+                    // Render employee rows
+                    data.forEach(employee => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="text-align: center;">${employee.emp_id}</td>
+                            <td>${employee.emp_name}</td>
+                            <td style="text-align: center;">${employee.depm_ID}</td>
+                            <td style="text-align: center;">${employee.shift_ID}</td>
+                            <td style="text-align: center;">${employee.emp_startDate}</td>
+                            <td style="text-align: center;">${employee.emp_phone}</td>
+                            <td style="text-align: center;">${employee.emp_mail}</td>
+                            <td>${employee.emp_address}</td>
+                            <td style="text-align: center; justify-content: center; padding: 12px 0px;">
+                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${employee._id}')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteEmployee('${employee._id}')">Delete</button>
+                            </td>`;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching employees:', error));
+        }
+
+        // Fetch employees when the page loads
+        document.addEventListener('DOMContentLoaded', fetchEmployees);
+
+        // Handle employee creation
+        document.getElementById('create-employee-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission behavior
+
+            if (!validateForm()) return;
+
+            // Gather employee data from the form
+            const newEmployee = {
+                emp_id: document.getElementById('employee-id').value.trim(),
+                emp_name: document.getElementById('employee-name').value.trim(),
+                depm_ID: document.querySelector('input[name="se-dept"]:checked')?.value || "",
+                shift_ID: document.querySelector('input[name="se-shift"]:checked')?.value || "",
+                emp_startDate: new Date().toISOString(),
+                emp_phone: document.getElementById('employee-phone').value.trim(),
+                emp_mail: document.getElementById('employee-email').value.trim(),
+                emp_address: document.getElementById('employee-address').value.trim()
+            };
+
+            // Debug: Log the payload being sent
+            console.log('New Employee Data:', newEmployee);
+
+            // Validate required fields
+            for (const key in newEmployee) {
+                if (!newEmployee[key]) {
+                    alert(`Please fill in the ${key.replace('emp_', '').toUpperCase()} field.`);
+                    return;
+                }
+            }
+
+            // Send POST request to create a new employee
+            fetch('http://localhost:3000/api/employees', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newEmployee)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to create employee.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Employee created:', data);
+                    fetchEmployees(); // Reload the employee list (function assumed to exist)
+                    alert('Employee created successfully!');
+                    document.getElementById('create-employee-form').reset(); // Clear the form
+                })
+                .catch(error => {
+                    console.error('Error creating employee:', error);
+                    alert('Failed to create employee. Please try again.');
+                });
+        });
+
+        // Ensure that phone and email inputs are valid
+        const validateForm = () => {
+            const phone = document.getElementById('employee-phone').value.trim();
+            // Validate phone number (10 digits)
+            if (!/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit telephone number.');
+                return false;
+            }
+            // Ensure department and shift are selected
+            if (!document.querySelector('input[name="se-dept"]:checked')) {
+                alert('Please select a department.');
+                return false;
+            }
+            if (!document.querySelector('input[name="se-shift"]:checked')) {
+                alert('Please select a shift.');
+                return false;
+            }
+            return true;
+        };
+
+        // Handle employee deletion
+        function deleteEmployee(id) {
+            fetch(`http://localhost:3000/api/employees/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => fetchEmployees())  // Reload employees after deletion
+            .catch(error => console.error('Error deleting employee:', error));
+        }
+
+        // Open the Update Form
+        function openUpdateForm(id) {
+            currentEmployeeId = id;
+            document.getElementById('updateForm').style.display = 'flex';
+
+            // Fetch existing employee details to pre-fill the form
+            fetch(`http://localhost:3000/api/employees/${id}`)
+                .then((response) => response.json())
+                .then((employee) => {
+                    document.getElementById('updateID').value = employee.emp_id;
+                    document.getElementById('updateName').value = employee.emp_name;
+
+                    // Pre-select the department radio button
+                    const deptRadios = document.querySelectorAll('input[name="se-dept"]');
+                    deptRadios.forEach((radio) => {
+                        if (radio.value === employee.depm_ID) {
+                            radio.checked = true;
+                        }
+                    });
+
+                    // Pre-select the shift radio button
+                    const shiftRadios = document.querySelectorAll('input[name="se-shift"]');
+                    shiftRadios.forEach((radio) => {
+                        if (radio.value === employee.shift_ID) {
+                            radio.checked = true;
+                        }
+                    });
+
+                    document.getElementById('updateTel').value = employee.emp_phone;
+                    document.getElementById('updateEmail').value = employee.emp_mail;
+                    document.getElementById('updateAddress').value = employee.emp_address;
+                })
+                .catch((error) => console.error('Error fetching employee:', error));
+        }
+
+        // Close Update Form
+        function closeUpdateForm() {
+            document.getElementById('updateForm').style.display = 'none';
+        }
+
+        // Handle Form Submission
+        document.getElementById('updateEmployeeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Create an object to store updated employee data
+            const updatedEmployee = {};
+            // Check each input field and add it to the object only if it has a new value
+            const idValue = document.getElementById('updateID').value; // Employee ID (typically not updated, but included for reference)
+            if (idValue) updatedEmployee.emp_id = idValue;
+            const nameValue = document.getElementById('updateName').value;
+            if (nameValue) updatedEmployee.emp_name = nameValue;
+            const deptValue = document.querySelector('input[name="se-dept"]:checked')?.value;
+            if (deptValue) updatedEmployee.depm_ID = deptValue;
+            const shiftValue = document.querySelector('input[name="se-shift"]:checked')?.value;
+            if (shiftValue) updatedEmployee.shift_ID = shiftValue;
+            const startDateValue = document.getElementById('updateDateEmp').value;
+            if (startDateValue) updatedEmployee.emp_startDate = startDateValue;
+            const telValue = document.getElementById('updateTel').value;
+            if (telValue) updatedEmployee.emp_phone = telValue;
+            const emailValue = document.getElementById('updateEmail').value;
+            if (emailValue) updatedEmployee.emp_mail = emailValue;
+            const addressValue = document.getElementById('updateAddress').value;
+            if (addressValue) updatedEmployee.emp_address = addressValue;
+            // Check if there's at least one field to update
+            if (Object.keys(updatedEmployee).length === 0) {
+                alert('Please fill in at least one field to update.');
+                return;
+            }
+            // Send update request to the server
+            fetch(`http://localhost:3000/api/employees/${currentEmployeeId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedEmployee),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        // Reset input fields
+                        const inputs = document.querySelectorAll('#updateEmployeeForm input');
+                        inputs.forEach((input) => (input.value = ''));
+                        const textareas = document.querySelectorAll('#updateEmployeeForm textarea');
+                        textareas.forEach((textarea) => (textarea.value = ''));
+                        // Close the form and reload employees
+                        closeUpdateForm();
+                        fetchEmployees(); // Reloads the employee list
+                        alert('Employee updated successfully!');
+                    } else {
+                        alert('Failed to update. Please try again.');
+                    }
+                })
+                .catch((error) => console.error('Error updating employee:', error));
+        });
+
+
+        // Handle Clear button click
+        document.querySelector('.button_clear').addEventListener('click', function () {
+            document.getElementById('create-employee-form').reset(); // Reset the form
+        });
+
+        // link template
+        // Load template.html and inject into the placeholder
+        fetch("template.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("nav-placeholder").innerHTML = data;
+            })
+            .catch(error => console.error('Error loading template:', error));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+</html>

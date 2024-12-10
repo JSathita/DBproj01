@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction</title>
+    <link rel="stylesheet" href="transaction.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+    <content>
+        <!-- Create Transaction Form -->
+        <h2>Create Transaction</h2>
+        <form id="create-transaction-form">
+            <label for="cus-idcard">Customer ID Card</label>
+            <input type="text" id="cus-idcard" placeholder="Enter Customer ID Card" required>
+            <!-- Ticket Type Dropdown -->
+            <label for="ticket-type-dropdown">Ticket Type</label>
+            <select id="ticket-type-dropdown" required>
+                <option value="" disabled selected>Select Ticket Type</option>
+            </select>
+            <label for="ticket-quantity">Quantity</label>
+            <input type="number" id="ticket-quantity" placeholder="Enter Quantity" required>
+            <button type="button" id="add-ticket-btn">Add Ticket</button> <!-- แสดงผลตั๋วที่เลือก -->
+            <div class="selected-tickets" id="selected-tickets">
+                <h6>Selected Tickets</h6>
+                <ul id="selected-tickets-list"></ul>
+            </div> <!-- Promotion Selection (Dropdown) -->
+            <label for="pro-name">Promotion</label>
+            <select id="pro-name" required>
+                <option value="" disabled selected>Select a Promotion</option>
+            </select>
+            <button type="button" id="calculate-price-btn">Calculate Price</button>
+            <!-- Transaction Total Price and Number -->
+            <label for="trans-num">Total Tickets</label>
+            <input type="number" id="trans-num" placeholder="Total Tickets" required readonly>
+            
+            <label for="trans-totalPrice">Total Price</label>
+            <input type="number" id="trans-totalPrice" placeholder="Total Price" required readonly>
+            
+            <button type="submit">Create Transaction</button>
+        </form>
+        <!-- Transactions List -->
+        <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; text-align: center;">Transactions Detail</h2>
+        <div class="container mt-4" style="padding: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Customer ID Card</th>
+                        <th>Ticket Type</th>
+                        <th>Transaction Amount</th>
+                        <th>Promotion Name</th>
+                        <th>Total Price</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-table-body">
+                    <!-- Dynamic rows will go here -->
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            let selectedTicketTypes = [];  // สร้างตัวแปรเก็บข้อมูลตั๋วที่เลือก
+            let totalTickets = 0;
+            let totalPrice = 0;
+            
+            function updateTransactionSummary() {
+                totalTickets = selectedTicketTypes.reduce((sum, item) => sum + item.quantity, 0);
+                totalPrice = selectedTicketTypes.reduce((sum, item) => sum + (item.ticket.price * item.quantity), 0);
+                // Update the total number of tickets and total price on the form
+                document.getElementById('trans-num').value = totalTickets;
+                document.getElementById('trans-totalPrice').value = `$${totalPrice.toFixed(2)}`;
+            }
+            function updateSelectedTicketsList() {
+                const list = document.getElementById('selected-tickets-list');
+                list.innerHTML = '';  // Clear the current list
+                selectedTicketTypes.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.ticket.name} x ${item.quantity} ($${item.ticket.price * item.quantity})`;
+                    list.appendChild(li);
+                });
+            }
+            
+            // Function to fetch and display transactions
+            function fetchTransactions() {
+                fetch('http://localhost:3000/api/transactions')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.getElementById('transactions-table-body');
+                        tableBody.innerHTML = ''; // Clear the current rows
+                        data.forEach(transaction => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td style="text-align: center;">${transaction.cus_idcard}</td>
+                                <td style="text-align: center;">${transaction.tk_type}</td>
+                                <td style="text-align: center;">${transaction.trans_num}</td>
+                                <td style="text-align: center;">${transaction.pro_name}</td>
+                                <td style="text-align: center;">$${transaction.trans_totalPrice.toFixed(2)}</td>
+                                <td style="text-align: center;">${transaction.trans_date}</td>
+                                <td style="text-align: center;">
+                                    // <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${transaction._id}')">Update</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteTransaction('${transaction._id}')">Delete</button>
+                                </td>`;
+                            tableBody.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching transactions:', error));
+            }
+
+            // Function to handle transaction creation (POST)
+            document.getElementById('create-transaction-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const newTransaction = {
+                    cus_idcard: document.getElementById('transaction-cus-idcard').value,
+                    tk_type: document.getElementById('transaction-tk-type').value,
+                    trans_num: document.getElementById('transaction-trans-num').value,
+                    pro_name: document.getElementById('transaction-pro-name').value,
+                    trans_totalPrice: parseFloat(document.getElementById('transaction-trans-totalPrice').value),
+                    trans_status: false,
+                    trans_date: ''
+                };
+                fetch('http://localhost:3000/api/transactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newTransaction)
+                })
+                    .then(response => response.json())
+                    .then(() => {
+                        fetchTransactions(); // Reload the transaction list
+                        alert('Transaction created successfully!');
+                    })
+                    .catch(error => console.error('Error creating transaction:', error));
+            });
+
+            // Function to delete a transaction
+            function deleteTransaction(id) {
+                fetch(`http://localhost:3000/api/transactions/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(() => fetchTransactions()) // Reload transactions after deletion
+                    .catch(error => console.error('Error deleting transaction:', error));
+            }
+
+            // Fetch transactions when the page loads
+            document.addEventListener('DOMContentLoaded', fetchTransactions);
+
+            // Function to fetch and display available ticket types in dropdown
+            function populateTicketTypesDropdown() {
+                fetch('http://localhost:3000/api/tickets') // เปลี่ยน URL นี้ให้ตรงกับ API ของคุณ
+                    .then(response => response.json())
+                    .then(ticketTypes => {
+                        const ticketTypeDropdown = document.getElementById('ticket-type-dropdown');
+                        ticketTypes.forEach(ticket => {
+                            const option = document.createElement('option');
+                            option.value = ticket._id;
+                            option.textContent = `${ticket.name} : $${ticket.price}`;
+                            ticketTypeDropdown.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching ticket types:', error));
+            }
+
+            // Function to fetch promotions from the server
+            function fetchPromotions() {
+                fetch('http://localhost:3000/api/promotions') // เปลี่ยน URL นี้ให้ตรงกับ API ของคุณ
+                    .then(response => response.json())
+                    .then(promotions => {
+                        const promoSelect = document.getElementById('pro-name');
+                        promotions.forEach(promo => {
+                            const option = document.createElement('option');
+                            option.value = promo.name;
+                            option.textContent = `${promo.name} : ${promo.discount * 100}% OFF`;
+                            promoSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching promotions:', error));
+            }
+            // Function to check customer birthday and valid promotions
+            function checkCustomerPromotion() {
+                const cusId = document.getElementById('cus-idcard').value;
+
+                // ดึงข้อมูลลูกค้าจาก API
+                fetch(`http://localhost:3000/api/customers/${cusId}`) // เปลี่ยน URL นี้ให้ตรงกับ API ของคุณ
+                    .then(response => response.json())
+                    .then(customer => {
+                        const currentDate = new Date();
+                        const birthday = new Date(customer ? customer.cus_dateofbirth : '');
+
+                        // Check if today is the customer's birthday
+                        if (customer && currentDate.getDate() === birthday.getDate() && currentDate.getMonth() === birthday.getMonth()) {
+                            alert('Happy Birthday! You are eligible for the Birthday promotion.');
+                            return true; // Birthday promotion eligible
+                        }
+                        return false; // Not eligible for birthday promotion
+                    })
+                    .catch(error => console.error('Error fetching customer data:', error));
+            }
+
+            // Function to add a selected ticket type and quantity
+            function addTicket() {
+                const ticketTypeId = document.getElementById('ticket-type-dropdown').value;
+                const quantity = parseInt(document.getElementById('ticket-quantity').value, 10);
+
+                if (!ticketTypeId || isNaN(quantity) || quantity <= 0) {
+                    alert('Please select a ticket type and enter a valid quantity.');
+                    return;
+                }
+
+                // ดึงข้อมูลประเภทตั๋วจาก API
+                fetch(`http://localhost:3000/api/tickets/${ticketTypeId}`) // เปลี่ยน URL นี้ให้ตรงกับ API ของคุณ
+                    .then(response => response.json())
+                    .then(ticket => {
+                        if (!ticket) return;
+
+                        // Add the selected ticket and quantity to the array
+                        selectedTicketTypes.push({ ticket: ticket, quantity });
+
+                        // Recalculate total number of tickets and price
+                        updateTransactionSummary();
+                        updateSelectedTicketsList();
+                    })
+                    .catch(error => console.error('Error fetching ticket type:', error));
+            }
+
+            // Handle transaction creation
+            document.getElementById('create-transaction-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // เก็บข้อมูลการทำธุรกรรม
+                const transactionData = {
+                    customerId: document.getElementById('cus-idcard').value,
+                    selectedTickets: selectedTicketTypes,
+                    promotion: document.getElementById('pro-name').value,
+                    totalTickets: totalTickets,
+                    totalPrice: totalPrice
+                };
+
+                // ส่งข้อมูลการทำธุรกรรมไปที่เซิร์ฟเวอร์
+                fetch('http://localhost:3000/api/transactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transactionData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Transaction created successfully!');
+                        console.log(data); // แสดงข้อมูลการทำธุรกรรมที่ถูกส่งไป
+                        // ล้างข้อมูลหลังจากการสร้างธุรกรรม
+                        document.getElementById('create-transaction-form').reset();
+                        selectedTicketTypes = [];
+                        totalTickets = 0;
+                        totalPrice = 0;
+                        updateSelectedTicketsList();
+                    })
+                    .catch(error => {
+                        console.error('Error creating transaction:', error);
+                    });
+            });
+
+            // Function to calculate the total price after applying the promotion
+            function calculatePrice() {
+            const selectedPromo = document.getElementById('pro-name').value;
+            const promo = promotions.find(p => p.name === selectedPromo);
+            const birthdayEligible = checkCustomerPromotion();
+
+            if (birthdayEligible) {
+                totalPrice *= 0.5; // Apply birthday discount
+            } else if (selectedPromo === 'Family pack' && totalTickets >= 5) {
+                totalPrice *= 0.9; // Apply FamilyPack discount
+            }
+                document.getElementById('trans-num').value = totalTickets;
+                document.getElementById('trans-totalPrice').value = `$${totalPrice.toFixed(2)}`;
+            }
+
+        // Event listeners for buttons and form submission
+        document.getElementById('add-ticket-btn').addEventListener('click', addTicket);
+        document.getElementById('calculate-price-btn').addEventListener('click', calculatePrice);
+        document.getElementById('create-transaction-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            alert('Transaction Created!');
+            // Here, you can send the transaction data to your server for storage
+        });
+
+        // Initial setup
+        populateTicketTypesDropdown();
+        fetchPromotions();
+        fetchCustomers();
+
+        // link template
+        // Load template.html and inject into the placeholder
+        fetch("template.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("nav-placeholder").innerHTML = data;
+        })
+        .catch(error => console.error('Error loading template:', error));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </content>
+</body>
+</html>

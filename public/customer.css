@@ -1,11 +1,11 @@
-/* main layout styles */
-.Place {
+/* main css */
+.Customer{
     background-color: #fad25a;
     border-radius: 20px;
 }
 
-/* General Styling for Create  */
-.container-place {
+/* General Styling for Create Ticket */
+.container-tiket {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -13,24 +13,21 @@
     width: 100%;
     margin: 20px auto;
 }
-.container-place h2 {
-    margin-bottom: 20px;
+.container-tiket h2 {
+    margin-bottom: 5px;
     text-align: center;
 }
-#create-place-form {
+#create-customer-form {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas: 
-        /* "P_name P_name dropdown" */
-        "P_name P_detail P_detail"
-        "P_zone P_zone P_zone"
-        "P_capacity P_maintDate P_detailPrc"
-        "P_detailCond P_detailCond P_detailCond"
+        "C_id C_name C_dateofbirth"
+        "C_phone C_email C_idcard"
         "button-form button-form button-form"
         "text-exp text-exp text-exp";
     gap: 20px;
 }
-.P_name, .P_detail, .P_detailPrc,.P_capacity, .P_maintDate, .P_photo, .P_detailCond {
+.C_id, .C_name, .C_dateofbirth, .C_phone, .C_email, .C_idcard{
     padding: 6px 12px;
     height: 42.42px;
     font-size: 16px;
@@ -38,24 +35,12 @@
     border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-.P_name { grid-area: P_name; }
-.P_detail { grid-area: P_detail; }
-.P_detailPrc { grid-area: P_detailPrc; }
-.P_capacity { grid-area: P_capacity; }
-.P_maintDate { grid-area: P_maintDate; }
-.P_photo{grid-area: P_photo;}
-.P_detailCond { grid-area: P_detailCond;}
-.P_zone {
-    grid-area: P_zone;
-}
-/* General form styling */
-.P_zone {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    text-align: center;
-    justify-content: space-between;
-}
+.C_id { grid-area: C_id; }
+.C_name { grid-area: C_name; }
+.C_dateofbirth { grid-area: C_dateofbirth; }
+.C_phone { grid-area: C_phone; }
+.C_email { grid-area: C_email; }
+.C_idcard { grid-area: C_idcard; }
 .button-form{
     grid-area: button-form;
     display: grid;
@@ -101,6 +86,25 @@
     margin-top: 10px;
 }
 
+/* Show latest id */
+.latest-id-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.latest-id-container h4,
+.latest-id-container p {
+    display: inline-block;  
+    margin: 0;
+}
+.latest-id-container h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 5px;  /* Add some space between h4 and p */
+}
+.latest-id-container p {
+    font-size: 14px;
+    color: #007bff;
+}
 /* update */
 .modal {
     display: flex;
@@ -175,14 +179,6 @@
     margin-bottom: 20px;
     text-align: center;
 }
-
-.text-table {
-    display: block;
-    font-size: 14px;
-    color: #666;
-    text-align: center;
-    margin-top: 10px;
-}
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -234,7 +230,6 @@
     background-color: #589ff1 !important;
     color: white;
     border: none !important;
-    margin-bottom: 5px;
 }
 .btn-primary:hover {
     background-color: #2682eb !important;

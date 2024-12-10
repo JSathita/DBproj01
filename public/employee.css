@@ -1,11 +1,11 @@
-/* main layout styles */
-.Place {
+/* main css */
+.Employee{
     background-color: #fad25a;
     border-radius: 20px;
 }
 
-/* General Styling for Create  */
-.container-place {
+/* General Styling for Create Ticket */
+.container-tiket {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -13,24 +13,24 @@
     width: 100%;
     margin: 20px auto;
 }
-.container-place h2 {
-    margin-bottom: 20px;
+.container-tiket h2 {
+    margin-bottom: 5px;
     text-align: center;
 }
-#create-place-form {
+#create-employee-form {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas: 
-        /* "P_name P_name dropdown" */
-        "P_name P_detail P_detail"
-        "P_zone P_zone P_zone"
-        "P_capacity P_maintDate P_detailPrc"
-        "P_detailCond P_detailCond P_detailCond"
-        "button-form button-form button-form"
-        "text-exp text-exp text-exp";
+        "E_id E_name"
+        "E_dept E_dept"
+        "E_shift E_shift"
+        "E_phone E_mail"
+        "E_address E_address"
+        "button-form button-form"
+        "text-exp text-exp";
     gap: 20px;
 }
-.P_name, .P_detail, .P_detailPrc,.P_capacity, .P_maintDate, .P_photo, .P_detailCond {
+.E_id, .E_name, .E_phone, .E_mail, .E_address{
     padding: 6px 12px;
     height: 42.42px;
     font-size: 16px;
@@ -38,23 +38,23 @@
     border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-.P_name { grid-area: P_name; }
-.P_detail { grid-area: P_detail; }
-.P_detailPrc { grid-area: P_detailPrc; }
-.P_capacity { grid-area: P_capacity; }
-.P_maintDate { grid-area: P_maintDate; }
-.P_photo{grid-area: P_photo;}
-.P_detailCond { grid-area: P_detailCond;}
-.P_zone {
-    grid-area: P_zone;
-}
-/* General form styling */
-.P_zone {
-    display: flex;
+.E_id { grid-area: E_id; }
+.E_name { grid-area: E_name; }
+.E_phone { grid-area: E_phone; }
+.E_mail { grid-area: E_mail; }
+.E_address { grid-area: E_address; }
+.E_dept { grid-area: E_dept; }
+.E_shift { grid-area: E_shift; }
+.E_dept, .E_shift {
+    display: block;
     flex-wrap: wrap;
     gap: 10px;
-    text-align: center;
     justify-content: space-between;
+}
+.E_dept label, .E_shift label {
+    display: inline-block;
+    width: 18%; /* Ensures that labels inside these sections take up half space each */
+    margin-bottom: 5px;
 }
 .button-form{
     grid-area: button-form;
@@ -101,6 +101,25 @@
     margin-top: 10px;
 }
 
+/* Show latest id */
+.latest-id-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.latest-id-container h4,
+.latest-id-container p {
+    display: inline-block;  
+    margin: 0;
+}
+.latest-id-container h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 5px;  /* Add some space between h4 and p */
+}
+.latest-id-container p {
+    font-size: 14px;
+    color: #007bff;
+}
 /* update */
 .modal {
     display: flex;
@@ -175,14 +194,31 @@
     margin-bottom: 20px;
     text-align: center;
 }
-
-.text-table {
-    display: block;
-    font-size: 14px;
-    color: #666;
-    text-align: center;
-    margin-top: 10px;
+/* Adjust radio button size */
+.modal-content input[type="radio"] {
+    width: 12px;
+    height: 12px;
+    margin: 0 1px 0 0;
 }
+/* Style the text (span) beside the radio buttons */
+.modal-content label span {
+    font-size: 14px; /* Adjust font size for labels */
+    color: #343a40; /* Neutral text color */
+}
+/* Radio button containers styling (optional) */
+.modal-content .E_depti label,.modal-content .E_shift label {
+    display: inline-block; /* Align them horizontally */
+    margin-right: 10px; /* Space between options */
+    margin-bottom: 10px; /* Space for multiple lines */
+    width: 17%; /* Ensures that labels inside these sections take up half space each */
+    margin-bottom: 5px;
+    font-size: 14px;
+    vertical-align: middle; /* Align radio buttons with text */
+}
+.modal-content .E_shift label {
+    margin-bottom: 10px;
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -234,7 +270,6 @@
     background-color: #589ff1 !important;
     color: white;
     border: none !important;
-    margin-bottom: 5px;
 }
 .btn-primary:hover {
     background-color: #2682eb !important;
