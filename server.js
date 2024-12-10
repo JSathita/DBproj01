@@ -98,6 +98,13 @@ const transactionSchema = new mongoose.Schema({
     trans_status: Boolean,
     trans_date: { type: Date, required: true }
 });
+const promotionSchema = new mongoose.Schema({
+    pro_id: { type: String, required: true, trim: true },
+    pro_name: { type: String, required: true, trim: true },
+    pro_discount: Number,
+    pro_cond: { type: String, required: true, trim: true },
+    pro_photo: { type: String, required: true, trim: true },
+})
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
 const Place = mongoose.model('Place',placeSchema);
@@ -105,6 +112,7 @@ const Review = mongoose.model('Review', reviewSchema);
 const Employee = mongoose.model('Employee', empSchema);
 const Customer = mongoose.model('Customer', cusSchema);
 const Transaction = mongoose.model('Transaction', transactionSchema);
+const Promotion = mongoose.model('Promotion', promotionSchema);
 
 // API Route to fetch items
 app.get('/api/tickets', async (req, res) => {
@@ -153,6 +161,14 @@ app.get('/api/transactions', async (req, res) => {
     res.json(transactions); // Send all transactions as JSON
     } catch (error) {
     res.status(500).send('Error fetching transactions');
+    }
+});
+app.get('/api/promotions', async (req, res) => {
+    try {
+        const promotions = await Promotion.find();
+        res.json(promotions);
+    } catch (error) {
+        res.status(500).send('Error fetching data');
     }
 });
 
@@ -226,6 +242,16 @@ app.post('/api/transactions', async (req, res) => {
         res.status(400).send('Error creating transaction');
     }
 });
+//Create a new ticket
+app.post('/api/promotions', async (req, res) => {
+    try {
+        const promotion = new Promotion(req.body);
+        await promotion.save();
+        res.status(201).json(promotion);  // Return the newly created promotion
+    } catch (error) {
+        res.status(400).send('Error creating promotion');
+    }
+});
 
 // 2. Get all tickets (Read)
 app.get('/api/tickets', async (req, res) => {
@@ -279,6 +305,15 @@ app.get('/api/transactions', async (req, res) => {
         res.json(transactions); // Send the data as JSON
     } catch (error) {
         res.status(500).send('Error fetching transactions');
+    }
+});
+//Get all promotions (Read)
+app.get('/api/promotions', async (req, res) => {
+    try {
+        const promotions = await Promotion.find();
+        res.json(promotions);  // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching promotions');
     }
 });
 
@@ -354,6 +389,18 @@ app.put('/api/transactions/:id', async (req, res) => {
         res.status(400).send('Error updating transaction');
     }
 });
+// 3. Update a promotion by ID
+app.put('/api/promotions/:id', async (req, res) => {
+    try {
+        const updatedPromotion = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedPromotion) {
+            return res.status(404).send('Promotion not found');
+        }
+        res.json(updatedPromotion);  // Return the updated promotion
+    } catch (error) {
+        res.status(400).send('Error updating promotion');
+    }
+});
 
 // 4. Delete a ticket by ID
 app.delete('/api/tickets/:id', async (req, res) => {
@@ -415,7 +462,7 @@ app.delete('/api/customers/:id', async (req, res) => {
         res.status(500).send('Error deleting Customer');
     }
 });
-// 4. Delete a transaction by ID
+//Delete a transaction by ID
 app.delete('/api/transactions/:id', async (req, res) => {
     try {
         const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
@@ -425,6 +472,18 @@ app.delete('/api/transactions/:id', async (req, res) => {
     res.json({ message: 'Transaction deleted successfully' });  // Send success message
     } catch (error) {
         res.status(500).send('Error deleting transaction');
+    }
+});
+//Delete a promotion by ID
+app.delete('/api/promotions/:id', async (req, res) => {
+    try {
+        const deletedPromotion = await Promotion.findByIdAndDelete(req.params.id);
+        if (!deletedPromotion) {
+            return res.status(404).send('Promotion not found');
+        }
+        res.json({ message: 'Promotion deleted successfully' });  // Send success message
+    } catch (error) {
+        res.status(500).send('Error deleting Promotion');
     }
 });
 
@@ -437,5 +496,52 @@ app.post('/login', (req, res) => {
         res.redirect('/dashboard.html');
     } else {
         res.send('Invalid credentials. Please try again.');
+    }
+});
+
+//dashboard
+// Get count of places
+app.get('/api/places/count', async (req, res) => {
+    try {
+        const count = await Place.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching places count');
+    }
+});
+// Get count of reviews
+app.get('/api/reviews/count', async (req, res) => {
+    try {
+        const count = await Review.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching reviews count');
+    }
+});
+// Get count of tickets
+app.get('/api/tickets/count', async (req, res) => {
+    try {
+        const count = await Ticket.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching tickets count');
+    }
+});
+// Get count of customers
+app.get('/api/customers/count', async (req, res) => {
+    try {
+        const count = await Customer.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching customers count');
+    }
+});
+// Get count of employees
+app.get('/api/employees/count', async (req, res) => {
+    try {
+        const count = await Employee.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching employees count');
     }
 });
