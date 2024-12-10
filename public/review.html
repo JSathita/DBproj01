@@ -16,9 +16,10 @@
         <div class="container-review">
             <h2 style="font-size: 20px; font-weight: bold;">Make Complaint</h2>
             <form id="create-review-form">
-                <input class="R_name" type="text" id="review-name" placeholder="*Name*" required>
-                <input class="R_detail" type="text" id="review-detail" placeholder="Detail" required>
-                <input class="R_date" type="date" id="review-date" placeholder="Date" required>
+                <input class="R_name" type="text" id="review-name" placeholder="Name*" required>
+                <input class="R_topic" type="text" id="review-topic" placeholder="Topic" required>
+                <!-- <input class="R_date" type="date" id="review-date" placeholder="Date" required> -->
+                <textarea class="R_detail" id="review-detail" placeholder="Detail" required></textarea>
                 <div class="button-form">
                     <button class="button_clear" type="button">Clear</button>
                     <button class="button_create" type="submit">Create</button>
@@ -37,6 +38,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Topic</th>
                         <th>Detail</th>
                         <th>Date</th>
                         <th>Completion Date</th>
@@ -57,8 +59,6 @@
                 <span class="close" onclick="closeUpdateForm()">&times;</span>
                 <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: bold; margin-top: 10px;">Update Complaint</h2>
                 <form id="updateReviewForm">
-                    <label for="completedate">Date of completion:</label>
-                    <input type="datetime-local" id="updateCompletedate" required>
                     <label for="budget">Budget:</label>
                     <input type="number" id="updateBudget" required>
                     <label for="note">Notes:</label>
@@ -81,6 +81,7 @@
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td style="text-align: center;">${review.rev_name}</td>
+                            <td>${review.rev_topic}</td>
                             <td>${review.rev_detail}</td>
                             <td style="text-align: center;">${review.rev_date}</td>
                             <td style="text-align: center;">${review.rev_completedate || 'N/A'}</td>
@@ -104,8 +105,9 @@
                 e.preventDefault();
                 const newReview = {
                     rev_name: document.getElementById('review-name').value,
+                    rev_topic: document.getElementById('review-topic').value,
                     rev_detail: document.getElementById('review-detail').value,
-                    rev_date: document.getElementById('review-date').value,
+                    rev_date: new Date().toISOString(),
                     rev_completedate: '',
                     rev_budget: '',
                     rev_note: '',
@@ -157,7 +159,6 @@
                 fetch(`http://localhost:3000/api/reviews/${id}`)
                 .then(response => response.json())
                 .then(review => {
-                    document.getElementById('updateCompletedate').value = review.rev_completedate;
                     document.getElementById('updateBudget').value = review.rev_budget;
                     document.getElementById('updateNote').value = review.rev_note;
                 })
@@ -176,7 +177,7 @@
                 // Hide the Update button after successful submission
                 document.getElementById('updateButton').style.display = 'none';
                 const updatedReview = {
-                    rev_completedate: document.getElementById('updateCompletedate').value,
+                    rev_completedate: new Date().toISOString(),
                     rev_budget: document.getElementById('updateBudget').value,
                     rev_note: document.getElementById('updateNote').value,
                     rev_status: true // Mark the review as solved
