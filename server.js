@@ -39,29 +39,38 @@ const placeSchema = new mongoose.Schema({
         trim: true
     },
     place_capacity: {
-        type: Number, // กำหนดเป็น Number
+        // type: Number, // กำหนดเป็น Number
+        type: String,
         required: true,
-        min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
-        max: 2147483647  // ค่า 32-bit signed integer สูงสุด
+        trim: true
     },
     place_maintDate: {
-        type: Date,
+        type: String,
+        // type: Date,
         required: true,
         trim: true
     },
     place_zone: String,
     place_detailPrc: {
-        type: Number, // กำหนดเป็น Number
+        // type: Number, // กำหนดเป็น Number
+        type: String,
         required: true,
-        min: -2147483648, // ค่า 32-bit signed integer ต่ำสุด
-        max: 2147483647  // ค่า 32-bit signed integer สูงสุด
+        trim: true
     },
     place_detailCond: String,
-    ref: String
 })
+const reviewSchema = new mongoose.Schema({
+    rev_name: { type: String, required: true },
+    rev_detail: { type: String, required: true },
+    rev_date: { type: String, required: true },
+    rev_completedate: { type: String, default: '' },
+    rev_budget: { type: String, default: '' },
+    rev_note: { type: String, default: '' }
+});
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
-const Place = mongoose.model('Place',placeSchema)
+const Place = mongoose.model('Place',placeSchema);
+const Review = mongoose.model('Review', reviewSchema);
 
 // API Route to fetch items
 app.get('/api/tickets', async (req, res) => {
@@ -70,6 +79,22 @@ app.get('/api/tickets', async (req, res) => {
         res.json(tickets);
     } catch (error) {
         res.status(500).send('Error fetching data');
+    }
+});
+app.get('/api/places', async (req, res) => {
+    try {
+        const places = await Place.find();
+        res.json(places);
+    } catch (error) {
+        res.status(500).send('Error fetching data');
+    }
+});
+app.get('/api/reviews', async (req, res) => {
+    try {
+        const reviews = await Review.find();
+        res.json(reviews);  // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching reviews');
     }
 });
 
@@ -103,6 +128,16 @@ app.post('/api/places', async (req, res) => {
         res.status(400).send('Error creating place');
     }
 });
+// create a new review
+app.post('/api/reviews', async (req, res) => {
+    try {
+        const review = new Review(req.body);
+        await review.save();
+        res.status(201).json(review);  // Return the newly created review
+    } catch (error) {
+        res.status(400).send('Error creating review');
+    }
+});
 
 // 2. Get all tickets (Read)
 app.get('/api/tickets', async (req, res) => {
@@ -122,13 +157,22 @@ app.get('/api/places', async (req, res) => {
         res.status(500).send('Error fetching places');
     }
 });
+// Get all reviews (Read)
+app.get('/api/reviews', async (req, res) => {
+    try {
+        const reviews = await Review.find();
+        res.json(reviews);  // Send the data as JSON
+    } catch (error) {
+        res.status(500).send('Error fetching reviews');
+    }
+});
 
 // 3. Update a ticket by ID
 app.put('/api/tickets/:id', async (req, res) => {
     try {
         const updatedTicket = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedTicket) {
-            return res.status(404).send('Place not found');
+            return res.status(404).send('Ticket not found');
         }
         res.json(updatedTicket);  // Return the updated ticket
     } catch (error) {
@@ -145,6 +189,18 @@ app.put('/api/places/:id', async (req, res) => {
         res.json(updatedPlace);
     } catch (error) {
         res.status(400).send('Error updating places');
+    }
+});
+//Update a review by ID
+app.put('/api/reviews/:id', async (req, res) => {
+    try {
+        const updatedReview = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedReview) {
+            return res.status(404).send('Review not found');
+        }
+        res.json(updatedReview);  // Return the updated review
+    } catch (error) {
+        res.status(400).send('Error updating review');
     }
 });
 
@@ -170,5 +226,85 @@ app.delete('/api/places/:id', async (req, res) => {
         res.json({ message: 'Place deleted successfully' });  // Send success message
     } catch (error) {
         res.status(500).send('Error deleting places');
+    }
+});
+//Delete a review by ID
+app.delete('/api/reviews/:id', async (req, res) => {
+    try {
+        const deletedReview = await Review.findByIdAndDelete(req.params.id);
+        if (!deletedReview) {
+            return res.status(404).send('Review not found');
+        }
+        res.json({ message: 'Review deleted successfully' });  // Send success message
+    } catch (error) {
+        res.status(500).send('Error deleting review');
+    }
+});
+
+const validUsername = 'user';
+const validPassword = 'password';
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    if (username === validUsername && password === validPassword) {
+        res.redirect('/ticket.html');
+    } else {
+        res.send('Invalid credentials. Please try again.');
+    }
+});
+// Get count of places
+// Get count of places
+// Get count of places
+// Get count of places
+// Get count of places
+// Get count of places
+// Get count of places
+// Get count of places
+app.get('/api/places/count', async (req, res) => {
+    try {
+        const count = await Place.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching places count');
+    }
+});
+
+// Get count of reviews
+app.get('/api/reviews/count', async (req, res) => {
+    try {
+        const count = await Review.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching reviews count');
+    }
+});
+
+// Get count of tickets
+app.get('/api/tickets/count', async (req, res) => {
+    try {
+        const count = await Ticket.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching tickets count');
+    }
+});
+
+// Get count of customers
+app.get('/api/customers/count', async (req, res) => {
+    try {
+        const count = await Customer.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching customers count');
+    }
+});
+
+// Get count of employees
+app.get('/api/employees/count', async (req, res) => {
+    try {
+        const count = await Employee.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching employees count');
     }
 });
