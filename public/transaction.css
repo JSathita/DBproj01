@@ -1,6 +1,7 @@
-/* body {
+body {
     font-family: Arial, sans-serif;
-} */
+}
+
 .transaction-selection-popup {
     display: none;
     position: absolute;
@@ -13,38 +14,49 @@
     width: 300px;
     z-index: 10;
 }
+
 .transaction-selection-popup ul {
     list-style-type: none;
     padding: 0;
 }
+
 .transaction-selection-popup li {
     padding: 5px;
     cursor: pointer;
 }
+
 .transaction-selection-popup li:hover {
     background-color: #f0f0f0;
 }
+
 .selected-transactions {
     margin-top: 20px;
 }
+
 .selected-transactions ul {
     list-style-type: none;
     padding: 0;
 }
+
 .selected-transactions li {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5px;
 }
+
 form {
     margin-bottom: 20px;
 }
+
 label {
     font-weight: bold;
     display: block;
     margin: 10px 0 5px;
 }
-input, select, button {
+
+input,
+select,
+button {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -52,18 +64,22 @@ input, select, button {
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+
 button {
     background-color: #007BFF;
     color: white;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #0056b3;
 }
+
 #selected-transactions-list {
     padding: 0;
     list-style-type: none;
 }
+
 #selected-transactions-list li {
     padding: 8px;
     border: 1px solid #ccc;
@@ -79,6 +95,7 @@ button:hover {
     padding: 0;
     list-style-type: none;
 }
+
 #transactions-list li {
     padding: 15px;
     margin-bottom: 15px;
@@ -89,24 +106,29 @@ button:hover {
     justify-content: space-between;
     align-items: center;
 }
+
 #transactions-list li h4 {
     margin: 0;
     font-size: 18px;
     color: #333;
 }
+
 #transactions-list li .transaction-details {
     flex-grow: 1;
     margin-left: 20px;
 }
+
 #transactions-list li .transaction-details span {
     display: block;
     margin: 5px 0;
     color: #666;
 }
+
 #transactions-list li .transaction-actions {
     display: flex;
     gap: 10px;
 }
+
 #transactions-list li button {
     padding: 8px 15px;
     background-color: #007BFF;
@@ -115,38 +137,46 @@ button:hover {
     border-radius: 5px;
     cursor: pointer;
 }
+
 #transactions-list li button:hover {
     background-color: #0056b3;
 }
+
 #transactions-list li button.delete {
     background-color: #FF4C4C;
 }
+
 #transactions-list li button.delete:hover {
     background-color: #e04343;
 }
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
     padding: 30px;
 }
+
 h2 {
     color: #007bff;
     text-align: center;
     margin-bottom: 20px;
 }
+
 form {
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 form label {
     font-size: 16px;
     margin-top: 10px;
 }
+
 input,
-    select,
-    button {
+select,
+button {
     width: 100%;
     padding: 10px;
     margin-top: 8px;
@@ -154,6 +184,7 @@ input,
     border-radius: 4px;
     border: 1px solid #ccc;
 }
+
 button {
     background-color: #007bff;
     color: white;
@@ -161,41 +192,51 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 button:hover {
     background-color: #0056b3;
 }
+
 .selected-tickets ul {
     list-style-type: none;
     padding: 0;
 }
+
 .selected-tickets li {
     background-color: #f1f1f1;
     margin: 5px 0;
     padding: 10px;
     border-radius: 4px;
 }
+
 .table th,
-    .table td {
+.table td {
     text-align: center;
 }
+
 .table {
     margin-top: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .table th {
     background-color: #007bff;
     color: white;
 }
+
 .table tbody tr:hover {
     background-color: #f1f1f1;
 }
+
 .btn-sm {
     padding: 5px 10px;
 }
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
 }
+
 .card {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
