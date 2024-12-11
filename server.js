@@ -545,3 +545,30 @@ app.get('/api/employees/count', async (req, res) => {
         res.status(500).send('Error fetching employees count');
     }
 });
+// Get count of customers
+app.get('/api/customers/count', async (req, res) => {
+    try {
+        const count = await Customer.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching customers count');
+    }
+});
+// Get count of transactions
+app.get('/api/transactions/count', async (req, res) => {
+    try {
+        const count = await Transaction.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching transactions count');
+    }
+});
+// Get count of promotions
+app.get('/api/promotions/count', async (req, res) => {
+    try {
+        const count = await Promotion.countDocuments();
+        res.json({ count });
+    } catch (error) {
+        res.status(500).send('Error fetching promotions count');
+    }
+});
