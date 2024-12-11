@@ -1,5 +1,5 @@
 /* main css */
-.Ticket{
+.Promotion{
     background-color: #fad25a;
     border-radius: 20px;
 }
@@ -14,20 +14,21 @@
     margin: 20px auto;
 }
 .container-tiket h2 {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     text-align: center;
 }
-#create-ticket-form {
+#create-promotion-form {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas: 
-        "T_type T_price T_photo T_name"
-        "T_detail T_detail T_detail T_detail"
-        "button-form button-form button-form button-form"
-        "text-exp text-exp text-exp text-exp";
+        "pro_id pro_name"
+        "pro_discount pro_photo"
+        "pro_cond pro_cond"
+        "button-form button-form"
+        "text-exp text-exp";
     gap: 20px;
 }
-.T_type, .T_price, .T_photo, .T_name, .T_detail {
+.pro_id, .pro_name, .pro_discount, .pro_photo, .pro_cond {
     padding: 6px 12px;
     height: 42.42px;
     font-size: 16px;
@@ -35,11 +36,11 @@
     border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-.T_type { grid-area: T_type; }
-.T_price { grid-area: T_price; }
-.T_photo { grid-area: T_photo; }
-.T_name { grid-area: T_name; }
-.T_detail { grid-area: T_detail;}
+.pro_id { grid-area: pro_id; }
+.pro_name { grid-area: pro_name; }
+.pro_discount { grid-area: pro_discount; }
+.pro_photo { grid-area: pro_photo; }
+.pro_cond { grid-area: pro_cond;}
 .button-form{
     grid-area: button-form;
     display: grid;
@@ -83,6 +84,25 @@
     color: #666;
     text-align: center;
     margin-top: 10px;
+}
+/* Show latest id */
+.latest-id-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.latest-id-container h4,
+.latest-id-container p {
+    display: inline-block;  
+    margin: 0;
+}
+.latest-id-container h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 5px;  /* Add some space between h4 and p */
+}
+.latest-id-container p {
+    font-size: 14px;
+    color: #007bff;
 }
 
 /* update */
@@ -225,7 +245,6 @@
     background-color: #589ff1 !important;
     color: white;
     border: none !important;
-    margin-bottom: 5px;
 }
 .btn-primary:hover {
     background-color: #2682eb !important;
