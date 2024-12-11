@@ -11,221 +11,126 @@
     <!-- link template -->
     <div id="nav-placeholder"></div>
     <content>
-        <div class="imageZC">
-            <div class="zoom-container">
-                <img src="map.png" alt="Amusement park" class="zoom-image"/>
-            </div>
-            <div class="conainer">
-                <div class="carousel-container">
-                    <div class="carousel-slide-container">
-                        
-                    <img src="createPromotion.jpg" class="carousel-img"/>
-                    <!-- add create promotion -->
-                    </div>
-                    <div class="carousel-dot">
-                        <span data-item="0" class="dot active"></span>
-                        <span data-item="1" class="dot"></span>
-                    </div>
-                    <div id="nextBtn" class="btn-right" style="margin-right: 10px;">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div id="prevBtn" class="btn-left" style="margin-left: 10px;">
-                        <i class="fas fa-chevron-left"></i>
+        <content>
+            <div class="imageZC">
+                <div class="zoom-container">
+                    <img src="map.png" alt="Amusement park" class="zoom-image"/>
+                </div>
+                <div class="container">
+                    <div class="carousel-container">
+                            <img src="proMidMonth.jpg" alt="New promotion">
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-
-            <!-- Dashboard Title -->
-            <h2 class="section-title">Dashboard Overview</h2>
-        
+        </content>        
+        <div class="container" style="padding: 0px; padding-right: 10px;">
             <!-- Dashboard Section -->
             <div class="dashboard-container">
-                
+                <!-- Promotion Card -->
+                <div class="dashboard-card">
+                    <a href="promotion.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <div class="card-icon" style="background-color: #f4f4f4; color: #666;">
+                        <i class="fa fa-asterisk"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="promotions-count">Loading...</h3>
+                        <p>Promotions</p>
+                    </div>
+                    </a>
+                </div>
+                <!-- Ticket Card -->
+                <div class="dashboard-card">
+                    <a href="ticket.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <div class="card-icon" style="background-color: #f4f4f4; color: #666;">
+                        <i class="fa fa-ticket"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="tickets-count">Loading...</h3>
+                        <p>Tickets</p>
+                    </div>
+                    </a>
+                </div>
+                <!-- Customer Card -->
+                <div class="dashboard-card">
+                    <a href="customer.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <div class="card-icon" style="background-color: #f4f4f4; color: #666;">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="customers-count">Loading...</h3>
+                        <p>Customer</p>
+                    </div>
+                    </a>
+                </div>
                 <!-- Places Card -->
                 <div class="dashboard-card">
-                    <h3>Places</h3>
-                    <p id="places-count">Loading...</p>
-                    <a href="#" class="action-btn">View Details</a>
+                    <a href="place.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <div class="card-icon" style="background-color: #f4f4f4; color: #666;">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="places-count">Loading...</h3>
+                        <p>Places</p>
+                    </div>
+                    </a>
                 </div>
-                
+                <!-- Employee Card -->
+                <div class="dashboard-card">
+                    <a href="employee.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <div class="card-icon" style="background-color: #f4f4f4; color: #666;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="employees-count">Loading...</h3>
+                        <p>Employees</p>
+                    </div>
+                    </a>
+                </div>
                 <!-- Reviews Card -->
                 <div class="dashboard-card">
-                    <h3>Reviews</h3>
-                    <p id="reviews-count">Loading...</p>
-                    <a href="#" class="action-btn">View Details</a>
+                    <a href="review.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                    <div class="card-icon" style="background-color: #f4f4f4; color: #666;">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="reviews-count">Loading...</h3>
+                        <p>Complaints</p>
+                    </div>
+                    </a>
                 </div>
-        
-                <!-- Tickets Card -->
-                <div class="dashboard-card">
-                    <h3>Tickets</h3>
-                    <p id="tickets-count">Loading...</p>
-                    <a href="#" class="action-btn">View Details</a>
-                </div>
-        
-                <!-- Customers Card -->
-                <div class="dashboard-card">
-                    <h3>Customers</h3>
-                    <p id="customers-count">Loading...</p>
-                    <a href="#" class="action-btn">View Details</a>
-                </div>
-        
-                <!-- Employees Card -->
-                <div class="dashboard-card">
-                    <h3>Employees</h3>
-                    <p id="employees-count">Loading...</p>
-                    <a href="#" class="action-btn">View Details</a>
-                </div>
-            </div>
-        </div>
-        <!-- Modal -->
-        <div id="promotionModal" class="modal">
-            <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Create New Promotion</h2>
-            <form id="create-promotion-form">
-                <input class="Pro_id" type="text" id="promotion-id" placeholder="ID" required>
-                <input class="Pro_name" type="text" id="promotion-name" placeholder="Price" required>
-                <input class="Pro_dis" type="number" id="promotion-dis" placeholder="Discount" required>
-                <input class="Pro_photo" type="file" id="promotion-photo" placeholder="Photo" required>
-                <textarea class="Pro_cond" id="promotion-cond" placeholder="Terms and Conditions" required></textarea>
-                <div class="button-form">
-                <button class="button_clear" type="button">Clear</button>
-                <button class="button_create" type="submit">Create</button>
-                </div>
-            </form>
             </div>
         </div>
 
     </content>
-    <script>
-        function fetchPromotions() {
-            fetch('http://localhost:3000/api/promotions')
-            .then(response => response.json())
-            .then(data => {
-                const carouselSlideContainer = document.querySelector('.carousel-slide-container');
-                carouselSlideContainer.innerHTML = '';  // Clear the current rows
-                data.forEach(promotion => {
-                    const img = document.createElement('img');
-                    img.src = promotion.pro_photo;
-                    img.classList.add('carousel-img');  // Add carousel-img class for styling
-                    carouselSlideContainer.appendChild(img);
-                });
-            })
-            .catch(error => console.error('Error fetching promotions:', error));
-        }
-
-        // Fetch promotions when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fetch promotions on page load
-            fetchPromotions();
-
-            // Select the specific image (or all carousel images)
-            const carouselImages = document.querySelectorAll('.carousel-img');
-
-            // Add a click listener to the createPromotion image
-            carouselImages.forEach((img) => {
-                if (img.src.includes('createPromotion.jpg')) {
-                    img.addEventListener('click', () => {
-                        openPromotionModal({});
-                    });
-                }
-            });
-        });
-
-        // Handle promotion creation
-        document.getElementById('create-promotion-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const newPromotion = {
-                pro_id: document.getElementById('promotion-id').value,
-                pro_name: document.getElementById('promotion-name').value,
-                pro_discount: document.getElementById('promotion-dis').value,
-                pro_cond: document.getElementById('promotion-cond').value,
-                pro_photo: document.getElementById('promotion-photo').value
-            };
-            fetch('http://localhost:3000/api/promotions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newPromotion)
-            })
-            .then(response => response.json())
-            .then(() => {
-                fetchPromotion();  // Reload the promotion list
-                alert('Promotion created successfully!');
-                document.getElementById('create-promotion-form').reset();
-            })
-            .catch(error => console.error('Error creating promotion:', error));
-        });
-        
-        //clear form
-        const clearButton = document.querySelector('.button_clear');
-        clearButton.addEventListener('click', function () {
-            document.getElementById('create-promotion-form').reset();  // Reset the form
-        });
-
-        function openPromotionModal(promotion) {
-            const modal = document.getElementById('promotionModal');
-            const promotionName = document.getElementById('promotion-name');
-            const promotionId = document.getElementById('promotion-id');
-            const promotionDiscount = document.getElementById('promotion-dis');
-            const promotionCondition = document.getElementById('promotion-cond');
-            const promotionPhoto = document.getElementById('promotion-photo');
-            
-            // Pre-fill the modal with promotion details if needed
-            promotionId.value = promotion.pro_id || '';
-            promotionName.value = promotion.pro_name || '';
-            promotionDiscount.value = promotion.pro_discount || '';
-            promotionCondition.value = promotion.pro_cond || '';
-            
-            // Show the modal
-            modal.style.display = 'block';
-
-            // Close modal when clicking on the close button
-            document.querySelector('.close-btn').addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            // Close modal when clicking outside of the modal
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-        }
-    </script>
     <script> //zoom img
-        // Select the container and image
-        const zoomContainer = document.querySelector(".zoom-container");
-        const zoomImage = document.querySelector(".zoom-image");
-        // Add mousemove event
-        zoomContainer.addEventListener("mousemove", (e) => {
-            const containerRect = zoomContainer.getBoundingClientRect(); // Get container dimensions
-            // Calculate mouse position relative to the container
-            const offsetX = e.clientX - containerRect.left;
-            const offsetY = e.clientY - containerRect.top;
-            // Ensure the mouse stays within the container's boundaries
-            const adjustedX = Math.max(0, Math.min(offsetX, containerRect.width));
-            const adjustedY = Math.max(0, Math.min(offsetY, containerRect.height));
-            // Calculate zoom scale and adjust image position
-            const zoomFactor = 2; // Adjust zoom level here
-            const imageWidth = zoomImage.offsetWidth * zoomFactor;
-            const imageHeight = zoomImage.offsetHeight * zoomFactor;
-            // Calculate the translation limits to keep zoom within edges
-            const maxTranslateX = Math.max(0, (imageWidth - containerRect.width) / zoomFactor);
-            const maxTranslateY = Math.max(0, (imageHeight - containerRect.height) / zoomFactor);
+        const zoomContainer = document.querySelector('.zoom-container');
+        const zoomImg = zoomContainer.querySelector('img');
 
-            const translateX = Math.min(Math.max(adjustedX * (zoomFactor - 1), 0), maxTranslateX);
-            const translateY = Math.min(Math.max(adjustedY * (zoomFactor - 1), 0), maxTranslateY);
-            // Apply the zoom effect with bounds respected
-            zoomImage.style.transform = `scale(${zoomFactor}) translate(-${translateX}px, -${translateY}px)`;
+        zoomContainer.addEventListener('mousemove', (e) => {
+            // Get the bounding rectangle of the zoom container
+            const rect = zoomContainer.getBoundingClientRect();
+
+            // Calculate mouse position relative to the container
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+
+            // Clamp x and y to stay within the container's bounds
+            x = Math.max(0, Math.min(x, rect.width));
+            y = Math.max(0, Math.min(y, rect.height));
+
+            // Calculate the percentage of movement relative to the image size
+            const xPercent = (x / rect.width) * 100;
+            const yPercent = (y / rect.height) * 100;
+
+            // Apply the transform to the image
+            zoomImg.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+            zoomImg.style.transform = 'scale(2)'; // Adjust the zoom level as needed
         });
 
-        // Reset zoom on mouse leave
-        zoomContainer.addEventListener("mouseleave", () => {
-            zoomImage.style.transform = "scale(1) translate(0, 0)";
+        // Reset the image transform when the mouse leaves the zoom container
+        zoomContainer.addEventListener('mouseleave', () => {
+            zoomImg.style.transform = 'scale(1)';
+            zoomImg.style.transformOrigin = 'center center';
         });
     </script>
     <script> // link template
@@ -236,47 +141,155 @@
         })
         .catch(error => console.error('Error loading template:', error));
     </script>
-    <script> //promotion
-        const images = document.querySelectorAll('.carousel-img');
-        const dots = document.querySelectorAll('.dot');
+    <script>
+        // // Function to fetch and display the latest promotion with "New" tag
+        // async function fetchLatestPromotion() {
+        //     try {
+        //         // Fetch promotions from the API
+        //         const response = await fetch('/api/promotions'); // Adjust the URL to match your API endpoint
+        //         const promotions = await response.json();
 
-        let count = 0;
-        let totalImg = images.length;
-        let width = images[0].clientWidth;
+        //         // Assuming the API returns promotions in descending order of creation, the first item is the latest
+        //         const latestPromotion = promotions[0];
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
-        moveSlide(-1);
-        });
+        //         if (!latestPromotion) {
+        //             console.error('No promotions available');
+        //             return;
+        //         }
 
-        document.getElementById('nextBtn').addEventListener('click', () => {
-        moveSlide(1);
-        });
+        //         // Get the container where the image will be displayed
+        //         const carouselContainer = document.querySelector('.carousel-container');
 
-        function moveSlide(direction) {
-        // count += direction;
-        // if (count >= totalImg) count = 0;
-        // if (count < 0) count = images.length - 1;
-        count = (count + direction + totalImg) % totalImg;
-        images.forEach((item) => {
-            item.style.transform = `translateX(${-count * width}px)`;
-        });
+        //         // Clear any previous content in the carousel
+        //         carouselContainer.innerHTML = '';
 
-        let dotActive = document.querySelector(`.dot[data-item="${count}"]`);
-        dots.forEach((d) => d.classList.remove('active'));
-        dotActive.classList.add('active');
+        //         // Create the "New" tag box
+        //         const newTag = document.createElement('div');
+        //         newTag.classList.add('new-tag');
+        //         newTag.textContent = 'New';
+                
+        //         // Create the image element
+        //         const img = document.createElement('img');
+        //         img.src = latestPromotion.pro_photo;
+        //         img.alt = 'Latest Promotion';
+        //         img.classList.add('carousel-image');
+                
+        //         // Append the "New" tag and image to the carousel container
+        //         carouselContainer.appendChild(newTag);
+        //         carouselContainer.appendChild(img);
+        //     } catch (error) {
+        //         console.error('Error fetching the latest promotion:', error);
+        //     }
+        // }
+
+        // // Call the function to fetch and display the latest promotion when the page loads
+        // window.onload = () => {
+        //     fetchLatestPromotion();
+        // };
+
+    </script>
+    <script>
+        // Function to fetch and display count data with optional filtering
+        async function fetchCountData(url, elementId, filterCallback = null) {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                let count = data.count;
+
+                // Apply filtering if a filterCallback is provided
+                if (filterCallback && Array.isArray(data)) {
+                    count = data.filter(filterCallback).length;
+                }
+
+                const countElement = document.getElementById(elementId);
+                countElement.textContent = `Total: ${count}`; // Display the count
+            } catch (error) {
+                console.error('Error fetching count data:', error);
+            }
         }
 
-        dots.forEach((dot) => {
-        dot.addEventListener('click', function () {
-            dots.forEach((d) => d.classList.remove('active'));
-            dot.classList.add('active');
+        // Function to fetch and filter employees working in the current shift
+        async function fetchWorkingEmployees() {
+            try {
+                const response = await fetch('/api/employees'); // Endpoint to get all employees
+                const employees = await response.json();
+                
+                const currentHour = new Date().getHours();
+                const currentMinute = new Date().getMinutes();
 
-            let itemValue = dot.dataset.item;
-            images.forEach((item) => {
-            item.style.transform = `translateX(${-itemValue * width}px)`;
-            });
-        });
-        });
+                // Define shifts in 24-hour format (start - end)
+                const shifts = [
+                    { shift: '2:00 PM - 8:00 PM', start: 14, end: 20 }, // Shift 1 (2 PM - 8 PM)
+                    { shift: '8:00 PM - 2:00 AM', start: 20, end: 2 },  // Shift 2 (8 PM - 2 AM)
+                    { shift: '6:00 AM - 2:00 PM', start: 6, end: 14 },   // Shift 3 (6 AM - 2 PM)
+                    { shift: '10:00 AM - 6:00 PM', start: 10, end: 18 }  // Shift 4 (10 AM - 6 PM)
+                ];
+
+                // Filter employees who are working at the current time
+                const currentShift = shifts.find(shift => {
+                    const start = shift.start;
+                    const end = shift.end;
+
+                    // Handle cases where shift spans midnight (e.g., 8 PM - 2 AM)
+                    if (end < start) {
+                        return (currentHour >= start || currentHour < end);
+                    } else {
+                        return currentHour >= start && currentHour < end;
+                    }
+                });
+
+                // Filter employees who are working in the current shift
+                const workingEmployees = employees.filter(employee => {
+                    return employee.shift_ID === currentShift.shift;
+                });
+
+                // Display the number of employees working
+                const employeeCountElement = document.getElementById('working-employees-count');
+                employeeCountElement.textContent = `Working Employees: ${workingEmployees.length}`;
+            } catch (error) {
+                console.error('Error fetching working employees:', error);
+            }
+        }
+
+        // Function to fetch and filter customers whose birthday is in the current month
+        async function fetchCustomersWithBirthdayThisMonth() {
+            try {
+                const response = await fetch('/api/customers'); // Endpoint to get all customers
+                const customers = await response.json();
+
+                const currentMonth = new Date().getMonth(); // Get current month (0 = January, 11 = December)
+
+                // Filter customers whose birthday is in the current month
+                const birthdayCustomers = customers.filter(customer => {
+                    const birthDate = new Date(customer.cus_dateofbirth); // Convert the customer's birthdate to a Date object
+                    return birthDate.getMonth() === currentMonth; // Check if the month matches the current month
+                });
+
+                // Display the number of customers with birthdays this month
+                const birthdayCountElement = document.getElementById('birthday-customers-count');
+                birthdayCountElement.textContent = `Customers with Birthday: ${birthdayCustomers.length}`;
+            } catch (error) {
+                console.error('Error fetching customers with birthday this month:', error);
+            }
+        }
+
+        // Fetch and display count data from all the endpoints
+        window.onload = () => {
+            fetchCountData('/api/places/count', 'places-count');
+            fetchCountData('/api/reviews', 'reviews-count', review => !review.rev_status);
+            fetchCountData('/api/tickets/count', 'tickets-count');
+            fetchCountData('/api/customers/count', 'customers-count');
+            fetchCountData('/api/employees/count', 'employees-count');
+            fetchCountData('/api/promotions/count', 'promotions-count');
+        };
+        // window.onload = () => {
+        //     fetchCountData('/api/places/count', 'places-count');
+        //     fetchCountData('/api/reviews', 'reviews-count', review => !review.rev_status);
+        //     fetchCountData('/api/tickets/count', 'tickets-count');
+        //     fetchWorkingEmployees('/api/employees', 'employees-count');
+        //     fetchCustomersWithBirthdayThisMonth('/api/customers', 'customers-count');
+        //     fetchCountData('/api/promotions/count', 'promotions-count');
+        // };
     </script>
 </body>
 </html>
