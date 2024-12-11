@@ -17,7 +17,7 @@
             <h2 style="font-size: 20px; font-weight: bold;">Create Promotion</h2>
             <div class="latest-id-container">
                 <h4>Latest Promotion ID :</h4>
-                <p id="latest-employee-id">No data yet</p>
+                <p id="latest-promotion-id">No data yet</p>
             </div>
             <form id="create-promotion-form">
                 <input class="pro_id" type="text" id="promotion-id" placeholder="ID" required>
@@ -85,6 +85,13 @@
                 .then(data => {
                     const tableBody = document.getElementById('promotions-table-body');
                     tableBody.innerHTML = ''; // Clear the current rows
+                    if (data.length > 0) {
+                        // Get the latest promotion based on the last entry in the array
+                        const latestPromotion = data[data.length - 1];
+                        document.getElementById('latest-promotion-id').textContent = latestPromotion.pro_id;
+                    } else {
+                        document.getElementById('latest-promotion-id').textContent = 'No data yet';
+                    }
                     data.forEach(promotion => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
@@ -94,13 +101,13 @@
                             <td><img src="${promotion.pro_photo}" class="img-fetch" alt="Photo" style="width: 50px; height: 50px; text-align: center;"></td>
                             <td>${promotion.pro_cond}</td>
                             <td style="text-align: center; justify-content: center; padding: 12px 0px;">
-                                <button class="btn btn-primary btn-sm" onclick="openUpdateForm('${promotion._id}')">Update</button>
+                                <button class="btn btn-primary btn-sm" style="display: none;" onclick="openUpdateForm('${promotion._id}')">Update</button>
                                 <button class="btn btn-danger btn-sm" onclick="deletePromotion('${promotion._id}')">Delete</button>
                             </td>`;
                         tableBody.appendChild(row);
                     });
                 })
-            .catch(error => console.error('Error fetching promotions:', error));
+                .catch(error => console.error('Error fetching promotions:', error));
         }
 
         // Fetch promotions when the page loads
@@ -172,16 +179,15 @@
         // Handle Form Submission for Update Promotion
         document.getElementById('updatePromotionForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Create a FormData object to handle file uploads
-            const formData = new FormData();
-            // Add the updated promotion data to formData if there's a value
+            const formData = new FormData(); // Use FormData to handle both file and non-file inputs
+            // Add promotion data to FormData if there's a value
             const IDValue = document.getElementById('updateID').value;
             if (IDValue) formData.append('pro_id', IDValue);
             const nameValue = document.getElementById('updateName').value;
             if (nameValue) formData.append('pro_name', nameValue);
             const disValue = document.getElementById('updatediscount').value;
             if (disValue) formData.append('pro_discount', disValue);
-            const photoValue = document.getElementById('updatePhoto').files[0];  // Get the file
+            const photoValue = document.getElementById('updatePhoto').files[0]; // Get the file input (photo)
             if (photoValue) formData.append('pro_photo', photoValue);
             const condValue = document.getElementById('updatecond').value;
             if (condValue) formData.append('pro_cond', condValue);
@@ -190,14 +196,14 @@
                 alert('Please fill in at least one field to update.');
                 return;
             }
-            // Send the update request to the server using PUT method
+            // Send the update request to the server
             fetch(`http://localhost:3000/api/promotions/${currentPromotionId}`, {
                 method: 'PUT',
-                body: formData,  // Send the FormData which includes both text and file data
+                body: formData,  // Send FormData which includes both text and file data
             })
             .then((response) => {
                 if (response.ok) {
-                    // Reset input fields after successful update
+                    // Reset input fields and clear the photo input
                     const inputs = document.querySelectorAll('#updatePromotionForm input, #updatePromotionForm textarea');
                     inputs.forEach((input) => input.value = '');
                     document.getElementById('updatePhoto').value = ''; // Reset file input
