@@ -16,7 +16,7 @@
         <div class="container-review">
             <h2 style="font-size: 20px; font-weight: bold;">Make Complaint</h2>
             <form id="create-review-form">
-                <input class="R_name" type="text" id="review-name" placeholder="Name*" required>
+                <input class="R_name" type="text" id="review-name" placeholder="Name*">
                 <input class="R_topic" type="text" id="review-topic" placeholder="Topic" required>
                 <!-- <input class="R_date" type="date" id="review-date" placeholder="Date" required> -->
                 <textarea class="R_detail" id="review-detail" placeholder="Detail" required></textarea>
@@ -104,7 +104,7 @@
             document.getElementById('create-review-form').addEventListener('submit', function (e) {
                 e.preventDefault();
                 const newReview = {
-                    rev_name: document.getElementById('review-name').value,
+                    rev_name: document.getElementById('review-name').value || "Anonymous",
                     rev_topic: document.getElementById('review-topic').value,
                     rev_detail: document.getElementById('review-detail').value,
                     rev_date: new Date().toISOString(),
